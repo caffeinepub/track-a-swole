@@ -1,99 +1,56 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-23T07:24:44.090Z",
+  "generatedAt": "2026-02-23T21:47:02.419Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 5,
-    "implemented": 4,
+    "total": 3,
+    "implemented": 3,
     "items": [
       {
-        "id": "REQ-10",
-        "summary": "Update ExerciseListItem component in frontend/src/components/ExerciseListItem.tsx to display exercise templates with their default set values (weight, reps for each of 3 sets, and comments) in the exercise library view, and support inline editing of template defaults",
+        "id": "REQ-25",
+        "summary": "Update the ActiveWorkout page in frontend/src/pages/ActiveWorkout.tsx to persist the current workout session state (session name, selected exercise IDs, and all entered set data including weight, reps, and comments for each exercise) to localStorage whenever any data changes",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/ExerciseListItem.tsx",
-          "frontend/src/pages/ExerciseLibrary.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/ExerciseListItem.tsx",
-          "frontend/src/pages/ExerciseLibrary.tsx"
-        ]
-      },
-      {
-        "id": "REQ-6",
-        "summary": "Modify the Exercise data model in backend/main.mo to store exercise templates with default values for 3 sets, where each set includes weight (Nat), reps (Nat), and a single comments field (Text) for the entire exercise",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-7",
-        "summary": "Update the AddExerciseForm component in frontend/src/components/AddExerciseForm.tsx to include input fields for Exercise Name, and for each of 3 sets: weight and reps fields, plus a single comments text area for the entire exercise",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/AddExerciseForm.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/AddExerciseForm.tsx"
-        ]
-      },
-      {
-        "id": "REQ-8",
-        "summary": "Modify the ExercisePicker component in frontend/src/components/ExercisePicker.tsx and session creation flow to pre-populate selected exercises with their template default values (3 sets with weight, reps, and comments) when adding them to a workout session",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/ExercisePicker.tsx",
-          "frontend/src/pages/CreateSession.tsx",
-          "frontend/src/components/SessionExerciseList.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/ExercisePicker.tsx",
-          "frontend/src/pages/CreateSession.tsx",
-          "frontend/src/components/SessionExerciseList.tsx"
-        ]
-      },
-      {
-        "id": "REQ-9",
-        "summary": "Update ExerciseTracker component in frontend/src/components/ExerciseTracker.tsx to display pre-populated template values and allow editing during the workout, with a 'Done' button that marks the exercise as completed and adds it to the current session's history",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/ExerciseTracker.tsx",
           "frontend/src/pages/ActiveWorkout.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/ExerciseTracker.tsx",
+          "frontend/src/pages/ActiveWorkout.tsx"
+        ]
+      },
+      {
+        "id": "REQ-26",
+        "summary": "Update the ActiveWorkout page in frontend/src/pages/ActiveWorkout.tsx to restore the persisted workout session state from localStorage on component mount if available, prioritizing localStorage data over URL params when both exist",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/ActiveWorkout.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/ActiveWorkout.tsx"
+        ]
+      },
+      {
+        "id": "REQ-27",
+        "summary": "Update the ActiveWorkout page in frontend/src/pages/ActiveWorkout.tsx to clear the persisted session data from localStorage after the 'Save Session' button successfully saves the workout to the backend",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/ActiveWorkout.tsx"
+        ],
+        "matchedFiles": [
           "frontend/src/pages/ActiveWorkout.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
-    "backend/main.mo",
-    "backend/migration.mo",
     "build-request.json",
-    "build-template/README.md",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/App.tsx",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
-    "frontend/src/components/AddExerciseForm.tsx",
-    "frontend/src/components/ExerciseListItem.tsx",
-    "frontend/src/components/ExercisePicker.tsx",
-    "frontend/src/components/ExerciseTracker.tsx",
-    "frontend/src/components/SessionExerciseList.tsx",
-    "frontend/src/components/SetInputRow.tsx",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useQueries.ts",
     "frontend/src/pages/ActiveWorkout.tsx",
-    "frontend/src/pages/CreateSession.tsx",
-    "frontend/src/pages/ExerciseLibrary.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

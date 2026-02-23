@@ -27,18 +27,21 @@ export default function CreateSession() {
   const [selectedExercises, setSelectedExercises] = useState<ExerciseTemplate[]>([]);
 
   const handleAddExercise = (exercise: ExerciseTemplate) => {
-    setSelectedExercises([...selectedExercises, exercise]);
+    setSelectedExercises((prev) => [...prev, exercise]);
+    toast.success(`Added ${exercise.name} to session`);
   };
 
   const handleRemoveExercise = (index: number) => {
-    setSelectedExercises(selectedExercises.filter((_, i) => i !== index));
+    setSelectedExercises((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleReorderExercise = (fromIndex: number, toIndex: number) => {
-    const newExercises = [...selectedExercises];
-    const [removed] = newExercises.splice(fromIndex, 1);
-    newExercises.splice(toIndex, 0, removed);
-    setSelectedExercises(newExercises);
+    setSelectedExercises((prev) => {
+      const newExercises = [...prev];
+      const [removed] = newExercises.splice(fromIndex, 1);
+      newExercises.splice(toIndex, 0, removed);
+      return newExercises;
+    });
   };
 
   const handleCreateSession = async () => {

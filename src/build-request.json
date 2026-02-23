@@ -1,118 +1,73 @@
 {
   "kind": "build_request",
-  "title": "Transform exercise library to store templates with default set values",
+  "title": "Implement session state persistence for active workout across page refreshes",
   "projectName": "Track-A-Swole",
-  "priority": "high",
+  "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-6",
-      "text": "Modify the Exercise data model in backend/main.mo to store exercise templates with default values for 3 sets, where each set includes weight (Nat), reps (Nat), and a single comments field (Text) for the entire exercise",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-last"
-        ],
-        "quotes": [
-          "store exercises as templates with those defaults but editable",
-          "I want to build a library of my own and have them saved in the library"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Exercise type in backend includes fields for 3 sets with weight and reps per set",
-        "Exercise type includes a single comments field for the entire exercise",
-        "All existing exercise CRUD operations (add, edit, delete, list) work with the new template structure"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Update the AddExerciseForm component in frontend/src/components/AddExerciseForm.tsx to include input fields for Exercise Name, and for each of 3 sets: weight and reps fields, plus a single comments text area for the entire exercise",
+      "id": "REQ-25",
+      "text": "Update the ActiveWorkout page in frontend/src/pages/ActiveWorkout.tsx to persist the current workout session state (session name, selected exercise IDs, and all entered set data including weight, reps, and comments for each exercise) to localStorage whenever any data changes",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-last"
+          "msg-user-yes"
         ],
         "quotes": [
-          "when adding an exercise to the library, there is only the option to add a name. There should be boxes for 'Exercise Name', 'Set 1', 'set 2', 'set 3'. and for each set, 'weight' and 'reps' and 'comments'"
+          "refresh shows nothing"
         ]
       },
       "acceptanceCriteria": [
-        "Form displays input fields for exercise name",
-        "Form displays 3 labeled sets (Set 1, Set 2, Set 3) with weight and reps inputs per set",
-        "Form includes a single comments text area for the entire exercise",
-        "Form validation ensures all required fields are filled before submission",
-        "Successfully creates exercise templates with default values"
+        "Session name is saved to localStorage on change",
+        "Exercise IDs are saved to localStorage when loaded from URL params",
+        "All set data (weight, reps, comments) for each exercise is saved to localStorage as it's entered or modified",
+        "localStorage key uses a consistent naming convention (e.g., 'activeWorkoutSession')"
       ]
     },
     {
-      "id": "REQ-8",
-      "text": "Modify the ExercisePicker component in frontend/src/components/ExercisePicker.tsx and session creation flow to pre-populate selected exercises with their template default values (3 sets with weight, reps, and comments) when adding them to a workout session",
+      "id": "REQ-26",
+      "text": "Update the ActiveWorkout page in frontend/src/pages/ActiveWorkout.tsx to restore the persisted workout session state from localStorage on component mount if available, prioritizing localStorage data over URL params when both exist",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-last"
+          "msg-user-yes"
         ],
         "quotes": [
-          "I want to prepopulate them so each day, I just pick the exercise I want to do to add to the workout session",
-          "those defaults will pre-populate—but you can edit them as you perform each exercise"
+          "refresh shows nothing"
         ]
       },
       "acceptanceCriteria": [
-        "When user selects an exercise from the library to add to a session, the exercise is added with pre-populated default values from the template",
-        "Pre-populated values include all 3 sets with their default weight and reps, plus the default comments",
-        "User can edit these pre-populated values during the workout session"
+        "On page load, check localStorage for saved session data",
+        "If localStorage has saved session, restore session name, exercise list, and all set data",
+        "If no localStorage data exists, fall back to loading exercises from URL params as currently implemented",
+        "User can continue editing their workout exactly where they left off after refresh"
       ]
     },
     {
-      "id": "REQ-9",
-      "text": "Update ExerciseTracker component in frontend/src/components/ExerciseTracker.tsx to display pre-populated template values and allow editing during the workout, with a 'Done' button that marks the exercise as completed and adds it to the current session's history",
+      "id": "REQ-27",
+      "text": "Update the ActiveWorkout page in frontend/src/pages/ActiveWorkout.tsx to clear the persisted session data from localStorage after the 'Save Session' button successfully saves the workout to the backend",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-last"
-        ],
-        "quotes": [
-          "As I do the exercise, I fill in how much weight I used, now many reps and how many sets. I then click a 'done' button and it gets added to my history for that days workout session"
+          "msg-user-yes"
         ]
       },
       "acceptanceCriteria": [
-        "Exercise tracker displays pre-populated values from the exercise template",
-        "All set values (weight, reps) and comments are editable",
-        "A 'Done' button is visible for each exercise",
-        "Clicking 'Done' saves the exercise with edited values to the current workout session",
-        "Completed exercises appear in the workout history for that day's session"
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "text": "Update ExerciseListItem component in frontend/src/components/ExerciseListItem.tsx to display exercise templates with their default set values (weight, reps for each of 3 sets, and comments) in the exercise library view, and support inline editing of template defaults",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-last"
-        ],
-        "quotes": [
-          "store exercises as templates with those defaults but editable",
-          "I don't want anything with just exercise names"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Exercise library displays each exercise with its full template data (name, 3 sets with weight/reps, comments)",
-        "Users can edit template default values inline",
-        "Changes to template defaults are persisted in the backend",
-        "Delete functionality continues to work with the new template structure"
+        "After successful completeSession mutation, remove the activeWorkoutSession data from localStorage",
+        "After clearing localStorage, the active workout state is also cleared as currently implemented",
+        "Starting a new workout session after completing one does not show data from the previous session"
       ]
     }
   ],
   "constraints": [
-    "Maintain single-actor architecture in backend/main.mo",
-    "Do not modify frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, or frontend/src/main.tsx",
-    "Preserve existing dark theme styling using OKLCH color system",
-    "Keep exactly 3 sets per exercise as specified by the user"
+    "Do not modify the existing completeSession mutation logic that already works correctly",
+    "Do not change the backend schema or add new backend endpoints",
+    "Maintain the existing session clearing behavior after successful save"
   ],
   "nonGoals": [
-    "Variable number of sets per exercise (must remain fixed at 3)",
-    "Separate comments field per set (single comments field for entire exercise)",
-    "Exercise library that stores only exercise names without template data"
+    "Implementing server-side session persistence",
+    "Adding session recovery UI or prompts",
+    "Implementing multiple concurrent session support",
+    "Adding session auto-save functionality"
   ],
   "imageRequirements": {
     "required": [],

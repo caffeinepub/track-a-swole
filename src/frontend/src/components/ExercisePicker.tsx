@@ -13,6 +13,10 @@ export default function ExercisePicker({ exercises, onSelectExercise }: Exercise
   const [selectedId, setSelectedId] = useState<string>('');
 
   const handleAdd = () => {
+    if (!selectedId) {
+      return;
+    }
+    
     const exercise = exercises.find((ex) => ex.id.toString() === selectedId);
     if (exercise) {
       onSelectExercise(exercise);
@@ -28,7 +32,7 @@ export default function ExercisePicker({ exercises, onSelectExercise }: Exercise
         </SelectTrigger>
         <SelectContent>
           {exercises.map((exercise) => (
-            <SelectItem key={Number(exercise.id)} value={exercise.id.toString()}>
+            <SelectItem key={exercise.id.toString()} value={exercise.id.toString()}>
               <div className="flex flex-col items-start">
                 <span className="font-medium">{exercise.name}</span>
                 <span className="text-xs text-muted-foreground">

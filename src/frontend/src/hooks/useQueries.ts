@@ -75,6 +75,48 @@ export function useCreateWorkoutSession() {
   });
 }
 
+export function useCompleteSession() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      sessionId,
+      exercises,
+    }: {
+      sessionId: bigint;
+      exercises: Array<{
+        exerciseId: bigint;
+        exerciseName: string;
+        sets: Array<{ weight: number; reps: bigint }>;
+        comments: string;
+      }>;
+    }) => {
+      if (!actor) throw new Error('Actor not initialized');
+      
+      // Add all exercises to the session
+      for (const exercise of exercises) {
+        // Calculate averages for the backend format
+        const avgWeight = exercise.sets.reduce((sum, set) => sum + set.weight, 0) / exercise.sets.length;
+        const avgReps = exercise.sets.reduce((sum, set) => Number(set.reps), 0) / exercise.sets.length;
+        
+        await actor.addExerciseToSession(
+          sessionId,
+          exercise.exerciseId,
+          avgWeight,
+          BigInt(Math.round(avgReps)),
+          BigInt(exercise.sets.length),
+          exercise.comments
+        );
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['history'] });
+      queryClient.invalidateQueries({ queryKey: ['sessions'] });
+    },
+  });
+}
+
 export function useAddExerciseToSession() {
   const { actor } = useActor();
   const queryClient = useQueryClient();

@@ -27,8 +27,9 @@ export default function AddExerciseForm({ onSuccess }: AddExerciseFormProps) {
     setSets(newSets);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    
     if (!name.trim()) {
       toast.error('Please enter an exercise name');
       return;
@@ -60,6 +61,7 @@ export default function AddExerciseForm({ onSuccess }: AddExerciseFormProps) {
       setComments('');
       onSuccess?.();
     } catch (error) {
+      console.error('Error adding exercise:', error);
       toast.error('Failed to add exercise');
     }
   };
@@ -79,6 +81,19 @@ export default function AddExerciseForm({ onSuccess }: AddExerciseFormProps) {
 
       <div className="space-y-3">
         <Label>Default Set Values</Label>
+        {/* Column Headers */}
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-medium text-muted-foreground w-12"></span>
+          <div className="flex-1 flex gap-2">
+            <div className="flex-1">
+              <span className="text-sm font-medium text-amber-500">Weight</span>
+            </div>
+            <div className="flex-1">
+              <span className="text-sm font-medium text-amber-500">Reps</span>
+            </div>
+          </div>
+        </div>
+        {/* Set Input Rows */}
         {sets.map((set, index) => (
           <div key={index} className="flex items-center gap-3">
             <span className="text-sm font-medium text-muted-foreground w-12">Set {index + 1}</span>
@@ -123,6 +138,10 @@ export default function AddExerciseForm({ onSuccess }: AddExerciseFormProps) {
 
       <Button
         type="submit"
+        onClick={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
         className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700"
         disabled={addExercise.isPending}
       >

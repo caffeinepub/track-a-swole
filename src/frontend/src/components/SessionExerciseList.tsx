@@ -14,7 +14,7 @@ export default function SessionExerciseList({ exercises, onRemove, onReorder }: 
     <div className="space-y-2">
       <h3 className="text-sm font-medium text-muted-foreground">Selected Exercises</h3>
       {exercises.map((exercise, index) => (
-        <Card key={`${exercise.id}-${index}`} className="p-3">
+        <Card key={`${exercise.id.toString()}-${index}`} className="p-3">
           <div className="flex items-center gap-3">
             <div className="flex flex-col gap-1">
               <Button

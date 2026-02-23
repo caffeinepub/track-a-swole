@@ -1,15 +1,21 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 5,
+  "projectStateVersion": 19,
   "summary": "Track-A-Swole: A workout tracking app to replace spreadsheets. Features include a custom exercise library where users can create exercise templates with default values for 3 sets (weight, reps, and comments per set), workout sessions where users select exercises from the library and edit the pre-populated values as they perform them, a 'done' button to add completed exercises to the session history, and workout history to view past sessions. Dark theme with modern design.",
   "architectural_notes": [
     "Workout sessions should store date, name, and array of exercises with set/weight/rep data",
     "Each exercise in a session has exactly 3 sets (fixed), but weight and reps are adjustable per set",
     "Exercise library templates should store: exercise name, and for each of 3 sets: default weight, default reps, and default comments",
-    "Workout session flow: select exercise from library → defaults pre-populate → user edits actual values → click 'done' → adds to session history"
+    "Workout session flow: select exercise from library → defaults pre-populate → user edits actual values → click 'done' → adds to session history",
+    "Workout session saving: Single 'Save Session' button saves entire session with all exercises to history at once (not individual exercise 'done' buttons)",
+    "History view structure: List of workout sessions (date/name) → expandable to show exercises → expandable to show set details (weight/reps/comments)",
+    "After saving a session via 'Save Session' button, the active workout should be cleared/reset to allow starting a new session",
+    "Active workout session state should persist across page refreshes using localStorage or similar mechanism"
   ],
-  "known_issues": [],
-  "isFixRequest": false,
+  "known_issues": [
+    "Page refresh during active workout clears session state - in-progress workout data is lost"
+  ],
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-create-an-exercise-library-management-system-where-users-can-add-new-exercises-with-a-name-field-edit-existing-exercise-names-and-delete-exercises-from-the-library",
@@ -82,6 +88,126 @@
         "REQ-10"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-add-weight-and-reps-as-column-headers-above-the-three-set-input-rows-in-the-addexerciseform-component-frontend-src-components-addexerciseform-tsx-used-for-creating-and-editing-exercise-templates-in-the-exercise-library",
+      "title": "Add 'Weight' and 'Reps' as column headers above the three set input rows in the AddExerciseForm component (frontend/src/components/AddExerciseForm.tsx) used for creating and editing exercise templates in the exercise library",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-weight-and-reps-as-column-headers-above-the-three-set-input-rows-in-the-exercisetracker-component-frontend-src-components-exercisetracker-tsx-used-during-active-workout-session-tracking",
+      "title": "Add 'Weight' and 'Reps' as column headers above the three set input rows in the ExerciseTracker component (frontend/src/components/ExerciseTracker.tsx) used during active workout session tracking",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-done-button-from-the-exercisetracker-component-in-frontend-src-components-exercisetracker-tsx",
+      "title": "Remove the 'Done' button from the ExerciseTracker component in frontend/src/components/ExerciseTracker.tsx",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-single-save-session-button-to-the-activeworkout-page-in-frontend-src-pages-activeworkout-tsx-that-saves-the-entire-workout-session-with-all-exercises-and-their-entered-set-data-weight-reps-comments-to-history",
+      "title": "Add a single 'Save Session' button to the ActiveWorkout page in frontend/src/pages/ActiveWorkout.tsx that saves the entire workout session with all exercises and their entered set data (weight, reps, comments) to history",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-completesession-mutation-in-frontend-src-hooks-usequeries-ts-to-properly-save-workout-sessions-to-backend-and-invalidate-the-history-query-cache",
+      "title": "Update the completeSession mutation in frontend/src/hooks/useQueries.ts to properly save workout sessions to backend and invalidate the history query cache",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-exercisepicker-component-in-frontend-src-components-exercisepicker-tsx-so-that-clicking-the-add-button-successfully-adds-the-selected-exercise-from-the-library-to-the-active-draft-workout-session",
+      "title": "Fix the ExercisePicker component in frontend/src/components/ExercisePicker.tsx so that clicking the 'Add' button successfully adds the selected exercise from the library to the active draft workout session",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-verify-the-createsession-page-in-frontend-src-pages-createsession-tsx-correctly-handles-the-state-update-when-exercises-are-added-through-the-exercisepicker-ensuring-the-sessionexerciselist-component-displays-newly-added-exercises",
+      "title": "Verify the CreateSession page in frontend/src/pages/CreateSession.tsx correctly handles the state update when exercises are added through the ExercisePicker, ensuring the SessionExerciseList component displays newly added exercises",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-add-exercise-template-button-in-the-addexerciseform-component-frontend-src-components-addexerciseform-tsx-so-that-clicking-it-successfully-saves-the-new-exercise-template-with-name-default-set-values-weight-and-reps-for-3-sets-and-comments-to-the-exercise-library-via-the-backend-then-closes-the-modal-dialog",
+      "title": "Fix the 'Add Exercise Template' button in the AddExerciseForm component (frontend/src/components/AddExerciseForm.tsx) so that clicking it successfully saves the new exercise template with name, default set values (weight and reps for 3 sets), and comments to the Exercise Library via the backend, then closes the modal dialog",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-workouthistory-page-in-frontend-src-pages-workouthistory-tsx-to-properly-fetch-and-display-saved-workout-sessions-from-the-backend-using-the-gethistory-query-hook",
+      "title": "Fix the WorkoutHistory page in frontend/src/pages/WorkoutHistory.tsx to properly fetch and display saved workout sessions from the backend using the getHistory query hook",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-verify-the-gethistory-query-hook-in-frontend-src-hooks-usequeries-ts-is-correctly-calling-the-backend-s-gethistory-method-and-properly-transforming-the-returned-data",
+      "title": "Verify the getHistory query hook in frontend/src/hooks/useQueries.ts is correctly calling the backend's getHistory method and properly transforming the returned data",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-completesession-mutation-in-frontend-src-hooks-usequeries-ts-to-properly-handle-the-session-completion-flow-without-throwing-errors-when-marking-sessions-as-completed",
+      "title": "Fix the completeSession mutation in frontend/src/hooks/useQueries.ts to properly handle the session completion flow without throwing errors when marking sessions as completed",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-activeworkout-page-in-frontend-src-pages-activeworkout-tsx-to-clear-the-active-workout-session-state-after-successfully-saving-via-the-save-session-button",
+      "title": "Update the ActiveWorkout page in frontend/src/pages/ActiveWorkout.tsx to clear the active workout session state after successfully saving via the 'Save Session' button",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-activeworkout-page-in-frontend-src-pages-activeworkout-tsx-to-persist-the-current-workout-session-state-session-name-selected-exercise-ids-and-all-entered-set-data-including-weight-reps-and-comments-for-each-exercise-to-localstorage-whenever-any-data-changes",
+      "title": "Update the ActiveWorkout page in frontend/src/pages/ActiveWorkout.tsx to persist the current workout session state (session name, selected exercise IDs, and all entered set data including weight, reps, and comments for each exercise) to localStorage whenever any data changes",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-activeworkout-page-in-frontend-src-pages-activeworkout-tsx-to-restore-the-persisted-workout-session-state-from-localstorage-on-component-mount-if-available-prioritizing-localstorage-data-over-url-params-when-both-exist",
+      "title": "Update the ActiveWorkout page in frontend/src/pages/ActiveWorkout.tsx to restore the persisted workout session state from localStorage on component mount if available, prioritizing localStorage data over URL params when both exist",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-activeworkout-page-in-frontend-src-pages-activeworkout-tsx-to-clear-the-persisted-session-data-from-localstorage-after-the-save-session-button-successfully-saves-the-workout-to-the-backend",
+      "title": "Update the ActiveWorkout page in frontend/src/pages/ActiveWorkout.tsx to clear the persisted session data from localStorage after the 'Save Session' button successfully saves the workout to the backend",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -128,17 +254,51 @@
       "status": "pending"
     },
     {
-      "id": "AR-9",
-      "summary": "Add 'done' button for each exercise to save it to the current session's history",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
       "id": "AR-10",
       "summary": "Modify the Exercise data model in backend/main.mo to store exercise templates with default values for 3 sets, where each set includes weight (Nat), reps (Nat), and a single comments field (Text) for the entire exercise",
       "reqIds": [
         "REQ-6"
       ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Add 'Weight' and 'Reps' column headers above the 3 sets in both exercise template view and workout session tracking view",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Remove individual 'Done' button from exercises and add a single 'Save Session' button to save entire workout session with all exercises to history",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Display workout history as a list of sessions with dates/names that can be expanded to show exercises and set details within each session",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Update the WorkoutHistory page in frontend/src/pages/WorkoutHistory.tsx to properly fetch and display saved workout sessions as a list using the existing HistorySessionCard component",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Verify that saved workout sessions appear in the WorkoutHistory page (frontend/src/pages/WorkoutHistory.tsx) after the completeSession mutation executes successfully",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Implement session state persistence so active workout data survives page refreshes",
+      "reqIds": [],
       "status": "pending"
     }
   ],

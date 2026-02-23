@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearch } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useWorkoutSession, useAddExerciseToSession, useExercises } from '@/hooks/useQueries';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useWorkoutSession, useCompleteSession, useExercises } from '@/hooks/useQueries';
 import ExerciseTracker from '@/components/ExerciseTracker';
-import { Loader2, Save } from 'lucide-react';
+import { Loader2, Save, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import type { ExerciseTemplate } from '@/backend';
 
@@ -12,8 +13,15 @@ interface ExerciseData {
   exercise: ExerciseTemplate;
   sets: Array<{ weight: string; reps: string }>;
   comments: string;
-  isCompleted: boolean;
 }
+
+interface PersistedSessionData {
+  sessionId: string;
+  exerciseIds: string[];
+  exercisesData: ExerciseData[];
+}
+
+const STORAGE_KEY = 'activeWorkoutSession';
 
 export default function ActiveWorkout() {
   const { sessionId } = useParams({ from: '/workout/$sessionId' });
@@ -21,13 +29,48 @@ export default function ActiveWorkout() {
   const navigate = useNavigate();
   const { data: session, isLoading: sessionLoading } = useWorkoutSession(BigInt(sessionId));
   const { data: allExercises, isLoading: exercisesLoading } = useExercises();
-  const addExerciseToSession = useAddExerciseToSession();
+  const completeSession = useCompleteSession();
 
   const [exercisesData, setExercisesData] = useState<ExerciseData[]>([]);
-  const [isSaving, setIsSaving] = useState(false);
+  const [isRestoringFromStorage, setIsRestoringFromStorage] = useState(true);
 
+  // Restore session from localStorage on mount
   useEffect(() => {
-    // Get exercise IDs from search params
+    if (!allExercises || allExercises.length === 0) {
+      return;
+    }
+
+    try {
+      const storedData = localStorage.getItem(STORAGE_KEY);
+      
+      if (storedData) {
+        const parsed: PersistedSessionData = JSON.parse(storedData);
+        
+        // Only restore if it matches the current session
+        if (parsed.sessionId === sessionId) {
+          // Reconstruct exercise data with current exercise templates
+          const restoredData: ExerciseData[] = parsed.exercisesData.map(data => {
+            const exercise = allExercises.find(ex => ex.id === data.exercise.id);
+            if (exercise) {
+              return {
+                exercise,
+                sets: data.sets,
+                comments: data.comments,
+              };
+            }
+            return data;
+          });
+          
+          setExercisesData(restoredData);
+          setIsRestoringFromStorage(false);
+          return;
+        }
+      }
+    } catch (error) {
+      console.error('Failed to restore session from localStorage:', error);
+    }
+
+    // If no localStorage data or different session, load from URL params
     const exerciseIdsParam = search.exerciseIds;
     
     if (exerciseIdsParam && allExercises && allExercises.length > 0) {
@@ -44,63 +87,111 @@ export default function ActiveWorkout() {
             reps: set.reps.toString(),
           })),
           comments: ex.comments,
-          isCompleted: false,
         }));
         setExercisesData(initialData);
       }
     }
-  }, [search.exerciseIds, allExercises]);
-
-  const handleExerciseComplete = (index: number, data: { sets: Array<{ weight: string; reps: string }>; comments: string }) => {
-    setExercisesData((prev) => {
-      const newData = [...prev];
-      newData[index] = { 
-        ...newData[index], 
-        sets: data.sets,
-        comments: data.comments,
-        isCompleted: true 
-      };
-      return newData;
-    });
-    toast.success(`${exercisesData[index].exercise.name} completed!`);
-  };
-
-  const handleSaveWorkout = async () => {
-    const completedExercises = exercisesData.filter(ex => ex.isCompleted);
     
-    if (completedExercises.length === 0) {
-      toast.error('Please complete at least one exercise before saving');
+    setIsRestoringFromStorage(false);
+  }, [sessionId, search.exerciseIds, allExercises]);
+
+  // Persist session to localStorage whenever data changes
+  useEffect(() => {
+    if (isRestoringFromStorage || exercisesData.length === 0) {
       return;
     }
 
-    setIsSaving(true);
     try {
-      for (const exerciseData of completedExercises) {
-        const avgWeight = exerciseData.sets.reduce((sum, set) => {
-          const weight = parseFloat(set.weight) || 0;
-          return sum + weight;
-        }, 0) / 3;
+      const exerciseIds = exercisesData.map(data => data.exercise.id.toString());
+      
+      const dataToStore: PersistedSessionData = {
+        sessionId,
+        exerciseIds,
+        exercisesData,
+      };
+      
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToStore));
+    } catch (error) {
+      console.error('Failed to persist session to localStorage:', error);
+    }
+  }, [sessionId, exercisesData, isRestoringFromStorage]);
 
-        const avgReps = exerciseData.sets.reduce((sum, set) => {
-          const reps = parseInt(set.reps) || 0;
-          return sum + reps;
-        }, 0) / 3;
+  const handleSetChange = (exerciseIndex: number, setIndex: number, field: 'weight' | 'reps', value: string) => {
+    setExercisesData((prev) => {
+      const newData = [...prev];
+      newData[exerciseIndex].sets[setIndex][field] = value;
+      return newData;
+    });
+  };
 
-        await addExerciseToSession.mutateAsync({
-          sessionId: BigInt(sessionId),
-          exerciseId: exerciseData.exercise.id,
-          weight: avgWeight,
-          reps: BigInt(Math.round(avgReps)),
-          sets: BigInt(3),
-          comments: exerciseData.comments,
-        });
+  const handleCommentsChange = (exerciseIndex: number, value: string) => {
+    setExercisesData((prev) => {
+      const newData = [...prev];
+      newData[exerciseIndex].comments = value;
+      return newData;
+    });
+  };
+
+  const handleSaveSession = async () => {
+    // Check if at least one exercise has data entered
+    const hasData = exercisesData.some(ex => 
+      ex.sets.some(set => set.weight || set.reps) || ex.comments
+    );
+    
+    if (!hasData) {
+      toast.error('Please enter data for at least one exercise before saving');
+      return;
+    }
+
+    try {
+      const exercises = exercisesData.map(exerciseData => ({
+        exerciseId: exerciseData.exercise.id,
+        exerciseName: exerciseData.exercise.name,
+        sets: exerciseData.sets.map(set => ({
+          weight: parseFloat(set.weight) || 0,
+          reps: BigInt(parseInt(set.reps) || 0),
+        })),
+        comments: exerciseData.comments,
+      }));
+
+      await completeSession.mutateAsync({
+        sessionId: BigInt(sessionId),
+        exercises,
+      });
+
+      toast.success('Workout session saved successfully!');
+      
+      // Clear localStorage after successful save
+      localStorage.removeItem(STORAGE_KEY);
+      
+      // Clear the workout state
+      if (allExercises) {
+        const exerciseIdsParam = search.exerciseIds;
+        if (exerciseIdsParam) {
+          const exerciseIds = exerciseIdsParam.split(',').map(id => BigInt(id));
+          const selectedExercises = exerciseIds
+            .map(id => allExercises.find(ex => ex.id === id))
+            .filter((ex): ex is ExerciseTemplate => ex !== undefined);
+          
+          // Reset to default template values
+          const clearedData: ExerciseData[] = selectedExercises.map((ex) => ({
+            exercise: ex,
+            sets: ex.sets.map((set) => ({
+              weight: set.weight.toString(),
+              reps: set.reps.toString(),
+            })),
+            comments: ex.comments,
+          }));
+          setExercisesData(clearedData);
+        }
       }
-      toast.success('Workout saved successfully!');
+      
+      // Navigate to history
       navigate({ to: '/history' });
     } catch (error) {
-      toast.error('Failed to save workout');
-    } finally {
-      setIsSaving(false);
+      console.error('Failed to save session:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to save workout session';
+      toast.error(errorMessage);
     }
   };
 
@@ -120,16 +211,30 @@ export default function ActiveWorkout() {
     );
   }
 
-  const completedCount = exercisesData.filter(ex => ex.isCompleted).length;
+  const hasAnyData = exercisesData.some(ex => 
+    ex.sets.some(set => set.weight || set.reps) || ex.comments
+  );
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{session.name}</h1>
         <p className="text-muted-foreground mt-1">
-          {completedCount} of {exercisesData.length} exercise{exercisesData.length === 1 ? '' : 's'} completed
+          Track your exercises and save when complete
         </p>
       </div>
+
+      {completeSession.isError && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error saving session</AlertTitle>
+          <AlertDescription>
+            {completeSession.error instanceof Error 
+              ? completeSession.error.message 
+              : 'An unexpected error occurred. Please try again.'}
+          </AlertDescription>
+        </Alert>
+      )}
 
       {exercisesData.length === 0 ? (
         <Card>
@@ -145,22 +250,24 @@ export default function ActiveWorkout() {
               <ExerciseTracker
                 key={`${exerciseData.exercise.id}-${index}`}
                 exercise={exerciseData.exercise}
-                onComplete={(data) => handleExerciseComplete(index, data)}
-                isCompleted={exerciseData.isCompleted}
+                sets={exerciseData.sets}
+                comments={exerciseData.comments}
+                onSetChange={(setIndex, field, value) => handleSetChange(index, setIndex, field, value)}
+                onCommentsChange={(value) => handleCommentsChange(index, value)}
               />
             ))}
           </div>
 
-          <Card className="bg-gradient-to-br from-amber-500/5 to-orange-600/5 border-amber-500/20">
+          <Card className="bg-gradient-to-br from-amber-500/5 to-orange-600/5 border-amber-500/20 sticky bottom-4">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Save className="h-5 w-5 text-amber-500" />
-                Save Your Workout
+                Save Session
               </CardTitle>
               <CardDescription>
-                {completedCount === 0 
-                  ? 'Complete at least one exercise to save your workout'
-                  : `${completedCount} exercise${completedCount === 1 ? '' : 's'} ready to save`
+                {hasAnyData 
+                  ? 'Save all exercises in this workout session to your history'
+                  : 'Enter data for at least one exercise to save your session'
                 }
               </CardDescription>
             </CardHeader>
@@ -170,16 +277,16 @@ export default function ActiveWorkout() {
                   variant="outline"
                   className="flex-1"
                   onClick={() => navigate({ to: '/' })}
-                  disabled={isSaving}
+                  disabled={completeSession.isPending}
                 >
                   Cancel
                 </Button>
                 <Button
                   className="flex-1 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700"
-                  onClick={handleSaveWorkout}
-                  disabled={isSaving || completedCount === 0}
+                  onClick={handleSaveSession}
+                  disabled={completeSession.isPending || !hasAnyData}
                 >
-                  {isSaving ? (
+                  {completeSession.isPending ? (
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                       Saving...
@@ -187,7 +294,7 @@ export default function ActiveWorkout() {
                   ) : (
                     <>
                       <Save className="h-4 w-4 mr-2" />
-                      Save Workout
+                      Save Session
                     </>
                   )}
                 </Button>
