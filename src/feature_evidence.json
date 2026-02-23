@@ -1,0 +1,81 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-update-the-addexerciseform-component-in-frontend-src-components-addexerciseform-tsx-to-include-input-fields-for-exercise-name-and-for-each-of-3-sets-weight-and-reps-fields-plus-a-single-comments-text-area-for-the-entire-exercise",
+      "featureTitle": "Update the AddExerciseForm component in frontend/src/components/AddExerciseForm.tsx to include input fields for Exercise Name, and for each of 3 sets: weight and reps fields, plus a single comments text area for the entire exercise",
+      "files": [
+        "frontend/src/components/AddExerciseForm.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-modify-the-exercisepicker-component-in-frontend-src-components-exercisepicker-tsx-and-session-creation-flow-to-pre-populate-selected-exercises-with-their-template-default-values-3-sets-with-weight-reps-and-comments-when-adding-them-to-a-workout-session",
+      "featureTitle": "Modify the ExercisePicker component in frontend/src/components/ExercisePicker.tsx and session creation flow to pre-populate selected exercises with their template default values (3 sets with weight, reps, and comments) when adding them to a workout session",
+      "files": [
+        "frontend/src/components/ExercisePicker.tsx",
+        "frontend/src/components/SessionExerciseList.tsx",
+        "frontend/src/pages/CreateSession.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-exercisetracker-component-in-frontend-src-components-exercisetracker-tsx-to-display-pre-populated-template-values-and-allow-editing-during-the-workout-with-a-done-button-that-marks-the-exercise-as-completed-and-adds-it-to-the-current-session-s-history",
+      "featureTitle": "Update ExerciseTracker component in frontend/src/components/ExerciseTracker.tsx to display pre-populated template values and allow editing during the workout, with a 'Done' button that marks the exercise as completed and adds it to the current session's history",
+      "files": [
+        "frontend/src/components/ExerciseTracker.tsx",
+        "frontend/src/pages/ActiveWorkout.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-exerciselistitem-component-in-frontend-src-components-exerciselistitem-tsx-to-display-exercise-templates-with-their-default-set-values-weight-reps-for-each-of-3-sets-and-comments-in-the-exercise-library-view-and-support-inline-editing-of-template-defaults",
+      "featureTitle": "Update ExerciseListItem component in frontend/src/components/ExerciseListItem.tsx to display exercise templates with their default set values (weight, reps for each of 3 sets, and comments) in the exercise library view, and support inline editing of template defaults",
+      "files": [
+        "frontend/src/components/ExerciseListItem.tsx",
+        "frontend/src/pages/ExerciseLibrary.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

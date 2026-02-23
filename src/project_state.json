@@ -1,0 +1,149 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 5,
+  "summary": "Track-A-Swole: A workout tracking app to replace spreadsheets. Features include a custom exercise library where users can create exercise templates with default values for 3 sets (weight, reps, and comments per set), workout sessions where users select exercises from the library and edit the pre-populated values as they perform them, a 'done' button to add completed exercises to the session history, and workout history to view past sessions. Dark theme with modern design.",
+  "architectural_notes": [
+    "Workout sessions should store date, name, and array of exercises with set/weight/rep data",
+    "Each exercise in a session has exactly 3 sets (fixed), but weight and reps are adjustable per set",
+    "Exercise library templates should store: exercise name, and for each of 3 sets: default weight, default reps, and default comments",
+    "Workout session flow: select exercise from library → defaults pre-populate → user edits actual values → click 'done' → adds to session history"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-create-an-exercise-library-management-system-where-users-can-add-new-exercises-with-a-name-field-edit-existing-exercise-names-and-delete-exercises-from-the-library",
+      "title": "Create an exercise library management system where users can add new exercises with a name field, edit existing exercise names, and delete exercises from the library",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-workout-session-creation-where-users-can-name-sessions-using-a-date-based-format-e-g-gym-day-upper-2-25-2026-add-multiple-exercises-from-the-library-to-a-session-reorder-exercises-within-a-session-and-remove-exercises-from-a-session",
+      "title": "Implement workout session creation where users can name sessions using a date-based format (e.g., 'Gym Day Upper 2/25/2026'), add multiple exercises from the library to a session, reorder exercises within a session, and remove exercises from a session",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-exercise-tracking-interface-where-each-exercise-in-a-session-can-be-expanded-to-show-exactly-3-sets-with-each-set-having-editable-weight-and-reps-fields-plus-a-single-comments-text-field-for-the-entire-exercise",
+      "title": "Build exercise tracking interface where each exercise in a session can be expanded to show exactly 3 sets, with each set having editable weight and reps fields, plus a single comments text field for the entire exercise",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-workout-history-tab-that-displays-all-past-workout-sessions-with-their-names-and-dates-allowing-users-to-view-the-details-of-each-completed-session-including-exercises-performed-weights-used-reps-completed-and-comments",
+      "title": "Create a workout history tab that displays all past workout sessions with their names and dates, allowing users to view the details of each completed session including exercises performed, weights used, reps completed, and comments",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-design-and-implement-a-dark-theme-with-a-distinctive-visual-style-choosing-a-creative-color-palette-avoiding-blue-and-purple-typography-and-layout-that-creates-a-cohesive-modern-aesthetic-throughout-the-application",
+      "title": "Design and implement a dark theme with a distinctive visual style, choosing a creative color palette (avoiding blue and purple), typography, and layout that creates a cohesive, modern aesthetic throughout the application",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-addexerciseform-component-in-frontend-src-components-addexerciseform-tsx-to-include-input-fields-for-exercise-name-and-for-each-of-3-sets-weight-and-reps-fields-plus-a-single-comments-text-area-for-the-entire-exercise",
+      "title": "Update the AddExerciseForm component in frontend/src/components/AddExerciseForm.tsx to include input fields for Exercise Name, and for each of 3 sets: weight and reps fields, plus a single comments text area for the entire exercise",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-modify-the-exercisepicker-component-in-frontend-src-components-exercisepicker-tsx-and-session-creation-flow-to-pre-populate-selected-exercises-with-their-template-default-values-3-sets-with-weight-reps-and-comments-when-adding-them-to-a-workout-session",
+      "title": "Modify the ExercisePicker component in frontend/src/components/ExercisePicker.tsx and session creation flow to pre-populate selected exercises with their template default values (3 sets with weight, reps, and comments) when adding them to a workout session",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-exercisetracker-component-in-frontend-src-components-exercisetracker-tsx-to-display-pre-populated-template-values-and-allow-editing-during-the-workout-with-a-done-button-that-marks-the-exercise-as-completed-and-adds-it-to-the-current-session-s-history",
+      "title": "Update ExerciseTracker component in frontend/src/components/ExerciseTracker.tsx to display pre-populated template values and allow editing during the workout, with a 'Done' button that marks the exercise as completed and adds it to the current session's history",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-exerciselistitem-component-in-frontend-src-components-exerciselistitem-tsx-to-display-exercise-templates-with-their-default-set-values-weight-reps-for-each-of-3-sets-and-comments-in-the-exercise-library-view-and-support-inline-editing-of-template-defaults",
+      "title": "Update ExerciseListItem component in frontend/src/components/ExerciseListItem.tsx to display exercise templates with their default set values (weight, reps for each of 3 sets, and comments) in the exercise library view, and support inline editing of template defaults",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-2",
+      "summary": "Create workout sessions named by date with multiple exercises",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Exercise tracking: 3 sets with adjustable weight and reps per set, plus comments field",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Workout history tab to view past sessions",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Dark theme with modern design",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Ability to reorder and remove exercises in a session",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Exercise library should store templates with default values for 3 sets (weight/reps/comments per set) instead of just exercise names",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "When adding exercise to workout session, pre-populate with template defaults that are editable during the workout",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Add 'done' button for each exercise to save it to the current session's history",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Modify the Exercise data model in backend/main.mo to store exercise templates with default values for 3 sets, where each set includes weight (Nat), reps (Nat), and a single comments field (Text) for the entire exercise",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Track-A-Swole",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

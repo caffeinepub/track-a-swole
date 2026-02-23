@@ -1,0 +1,21 @@
+{
+  "frontend/src/App.tsx": "Main application component with TanStack Router setup, defining all routes including workout route with search param validation for exerciseIds.",
+  "frontend/src/components/Layout.tsx": "Layout wrapper component with header, bottom navigation bar, and footer, providing consistent navigation across all pages with active state highlighting.",
+  "frontend/src/pages/Home.tsx": "Landing page displaying welcome message and quick action cards for accessing main features like exercise library, creating sessions, and viewing history.",
+  "frontend/src/pages/ExerciseLibrary.tsx": "Exercise library management page displaying exercise templates with full template data (name, sets, comments) and dialog for adding new templates.",
+  "frontend/src/components/AddExerciseForm.tsx": "Form component for creating exercise templates with name input, 3 sets with weight/reps inputs, and a comments field, with validation and submission handling.",
+  "frontend/src/components/ExerciseListItem.tsx": "Exercise template list item displaying full template data (name, 3 sets with weight/reps, comments) with inline editing for name and delete functionality.",
+  "frontend/src/pages/CreateSession.tsx": "Workout session creation page with session naming, exercise template selection from library, reordering capabilities, and navigation to active workout with exercise IDs passed via search params.",
+  "frontend/src/components/ExercisePicker.tsx": "Dropdown selector for choosing exercise templates from library, displaying template preview with set values in the dropdown options.",
+  "frontend/src/components/SessionExerciseList.tsx": "List component displaying selected exercise templates in a session with template default values preview, reorder controls, and remove functionality.",
+  "frontend/src/pages/ActiveWorkout.tsx": "Active workout tracking page that retrieves exercise templates from search params, allows users to complete exercises one by one with pre-populated template values, and saves completed exercises to session history.",
+  "frontend/src/components/ExerciseTracker.tsx": "Collapsible exercise tracker component with pre-populated template values (3 sets with weight/reps and comments), editable fields, and a \"Done\" button to mark exercise as completed.",
+  "frontend/src/components/SetInputRow.tsx": "Individual set input row displaying set number with weight and reps input fields, supporting disabled state for completed exercises.",
+  "frontend/src/pages/WorkoutHistory.tsx": "Workout history page displaying list of completed workout sessions with summary information.",
+  "frontend/src/components/HistorySessionCard.tsx": "Card component for displaying workout session summary in history list with date, exercise count, and navigation to detail view.",
+  "frontend/src/pages/SessionDetail.tsx": "Detailed view of a completed workout session showing all exercises with their sets, weights, reps, and comments.",
+  "frontend/src/components/CompletedExerciseDisplay.tsx": "Read-only display component for completed exercises showing exercise details in a table format with comments section.",
+  "frontend/src/hooks/useQueries.ts": "Custom React Query hooks for all backend operations including exercise template CRUD, session management, and workout history retrieval with proper type definitions for ExerciseTemplate.",
+  "frontend/src/index.css": "Global styles with OKLCH color system customized for dark theme with amber/orange accent colors, avoiding typical blue/purple AI aesthetics.",
+  "frontend/tailwind.config.js": "Tailwind configuration with extended color palette using amber/orange theme colors and custom design tokens."
+}

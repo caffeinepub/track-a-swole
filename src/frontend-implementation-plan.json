@@ -1,0 +1,96 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Transform exercise library to store templates with default set values",
+  "requirements": [
+    {
+      "id": "REQ-7",
+      "summary": "Update AddExerciseForm to include input fields for exercise name and 3 sets with weight/reps per set, plus a single comments field for the entire exercise",
+      "acceptanceCriteria": [
+        "Form displays input fields for exercise name",
+        "Form displays 3 labeled sets (Set 1, Set 2, Set 3) with weight and reps inputs per set",
+        "Form includes a single comments text area for the entire exercise",
+        "Form validation ensures all required fields are filled before submission",
+        "Successfully creates exercise templates with default values"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AddExerciseForm.tsx",
+          "operation": "modify",
+          "description": "Replace the single name input with a comprehensive form that includes exercise name input, three labeled set sections (Set 1, Set 2, Set 3) each with weight and reps number inputs, and a single comments textarea for the entire exercise. Update form state management to track all new fields (name, sets array with weight/reps objects, comments). Add validation to ensure all weight and reps fields are filled with valid numbers before submission. Update the mutation call to pass the new ExerciseTemplate structure to the backend addExercise method with sets array and comments."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Modify ExercisePicker component and session creation flow to pre-populate selected exercises with template default values when adding them to a workout session",
+      "acceptanceCriteria": [
+        "When user selects an exercise from the library to add to a session, the exercise is added with pre-populated default values from the template",
+        "Pre-populated values include all 3 sets with their default weight and reps, plus the default comments",
+        "User can edit these pre-populated values during the workout session"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ExercisePicker.tsx",
+          "operation": "modify",
+          "description": "Update the component to pass the full ExerciseTemplate object (including sets array and comments) to the onAddExercise callback instead of just the exercise ID. Modify the dropdown to display exercise names with a preview of their template data. Ensure the selected exercise's complete template structure is forwarded to the parent component for pre-population."
+        },
+        {
+          "path": "frontend/src/pages/CreateSession.tsx",
+          "operation": "modify",
+          "description": "Update the exercise selection handler to receive and store the full ExerciseTemplate objects (with sets and comments) instead of just exercise IDs. Modify the state management to preserve template default values for each selected exercise. Update the SessionExerciseList component usage to pass template data. Ensure that when navigating to ActiveWorkout page, the complete template data (3 sets with weight/reps and comments) is passed via navigation state."
+        },
+        {
+          "path": "frontend/src/components/SessionExerciseList.tsx",
+          "operation": "modify",
+          "description": "Update the component to accept and display exercise template data including the 3 sets with weight/reps values. Modify the exercise list items to show a preview of template defaults (e.g., Set 1: weight x reps format). Ensure reordering and removal operations preserve the full template structure for each exercise."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Update ExerciseTracker to display pre-populated template values, allow editing during workout, and include a Done button that marks exercise as completed and adds it to session history",
+      "acceptanceCriteria": [
+        "Exercise tracker displays pre-populated values from the exercise template",
+        "All set values (weight, reps) and comments are editable",
+        "A 'Done' button is visible for each exercise",
+        "Clicking 'Done' saves the exercise with edited values to the current workout session",
+        "Completed exercises appear in the workout history for that day's session"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ExerciseTracker.tsx",
+          "operation": "modify",
+          "description": "Modify the component to accept and initialize with pre-populated template values for all 3 sets (weight and reps) and comments from the ExerciseTemplate. Update state management to track edited values separately from template defaults. Add input fields for weight and reps for each of the 3 sets, pre-filled with template values but editable. Include an editable comments textarea pre-filled with template comments. Add a 'Done' button that triggers a callback to save the completed exercise with all edited values to the current workout session. Include visual feedback showing which fields have been edited versus using default values."
+        },
+        {
+          "path": "frontend/src/pages/ActiveWorkout.tsx",
+          "operation": "modify",
+          "description": "Update the page to receive and pass pre-populated template data to each ExerciseTracker component. Modify state management to track completed exercises with their edited values (3 sets with weight/reps and comments). Implement the callback handler for the ExerciseTracker 'Done' button that adds the completed exercise to the session's exercise list. Update the save workout functionality to persist all completed exercises with their final values to the backend using the addExerciseToSession method. Ensure that completed exercises are correctly added to the workout history."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Update ExerciseListItem to display exercise templates with default set values and support inline editing of template defaults",
+      "acceptanceCriteria": [
+        "Exercise library displays each exercise with its full template data (name, 3 sets with weight/reps, comments)",
+        "Users can edit template default values inline",
+        "Changes to template defaults are persisted in the backend",
+        "Delete functionality continues to work with the new template structure"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ExerciseListItem.tsx",
+          "operation": "modify",
+          "description": "Expand the component to display the full ExerciseTemplate structure including exercise name, all 3 sets with their weight and reps values, and the comments field. Replace the single name input with a multi-field inline editor that allows editing exercise name, weight/reps for each of the 3 sets, and comments. Update the edit mode UI to show labeled set sections (Set 1, Set 2, Set 3) with editable number inputs for weight and reps. Add an editable textarea for comments. Update the mutation handler to save all edited template fields (name, sets array, comments) to the backend using the editExercise method. Ensure delete functionality works with the new ExerciseTemplate structure."
+        },
+        {
+          "path": "frontend/src/pages/ExerciseLibrary.tsx",
+          "operation": "modify",
+          "description": "Update the exercise list rendering to accommodate the expanded ExerciseListItem component that now displays full template data. Adjust spacing and layout to properly show all 3 sets with weight/reps and comments for each exercise. Ensure the AddExerciseForm dialog works with the new template structure when creating exercises."
+        }
+      ]
+    }
+  ]
+}
