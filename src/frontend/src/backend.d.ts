@@ -50,6 +50,7 @@ export interface backendInterface {
     getNextExerciseId(): Promise<bigint>;
     getNextSessionId(): Promise<bigint>;
     getSessionExercises(sessionId: bigint): Promise<Array<WorkoutExercise>>;
+    getUserCount(): Promise<bigint>;
     getWorkoutHistory(): Promise<Array<WorkoutSessionHistory>>;
     getWorkoutSessionsByDate(): Promise<Array<WorkoutSession>>;
     removeExerciseFromSession(sessionId: bigint, exerciseIndex: bigint): Promise<void>;

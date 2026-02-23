@@ -1,55 +1,74 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Implement session state persistence for active workout across page refreshes",
+  "title": "Add Internet Identity authentication with user-specific data storage",
   "requirements": [
     {
-      "id": "REQ-25",
-      "summary": "Persist active workout session state to localStorage whenever data changes",
+      "id": "REQ-28",
+      "summary": "Create a login page component that displays when user is not authenticated, prompting them to sign in with Internet Identity",
       "acceptanceCriteria": [
-        "Session name is saved to localStorage on change",
-        "Exercise IDs are saved to localStorage when loaded from URL params",
-        "All set data (weight, reps, comments) for each exercise is saved to localStorage as it's entered or modified",
-        "localStorage key uses a consistent naming convention (e.g., 'activeWorkoutSession')"
+        "Unauthenticated users see a login page with clear messaging about needing to sign in",
+        "Login page includes a button that triggers Internet Identity authentication",
+        "After successful authentication, user is redirected to the home page"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/ActiveWorkout.tsx",
+          "path": "frontend/src/pages/Login.tsx",
+          "operation": "create",
+          "description": "Create a Login page component that displays a welcome message about Track-A-Swole and includes a prominent button to initiate Internet Identity authentication. Use the useInternetIdentity hook's login method to handle authentication. Style the page consistently with the app's amber/orange theme and dark mode support. Include clear messaging that users need to sign in to save their workout data."
+        },
+        {
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Add localStorage persistence logic to save session state whenever session name, exercise data, or set data changes. Use a useEffect hook that watches session name and exercise state arrays, and persist to localStorage under the key 'activeWorkoutSession'. Store session name, exercise IDs array, and complete set data (weight, reps, comments) for each exercise. Ensure this saves after any user input change in the session name field or any ExerciseTracker component updates."
+          "description": "Add a new route for the login page at path '/login' in the TanStack Router configuration. Import and register the Login component as a route alongside existing routes (home, exercises, create-session, workout, history, session detail)."
         }
       ]
     },
     {
-      "id": "REQ-26",
-      "summary": "Restore persisted workout session state from localStorage on page mount",
+      "id": "REQ-29",
+      "summary": "Update the Layout component to conditionally render main app navigation only for authenticated users, and display login prompt for unauthenticated users",
       "acceptanceCriteria": [
-        "On page load, check localStorage for saved session data",
-        "If localStorage has saved session, restore session name, exercise list, and all set data",
-        "If no localStorage data exists, fall back to loading exercises from URL params as currently implemented",
-        "User can continue editing their workout exactly where they left off after refresh"
+        "Authenticated users see the full app layout with navigation",
+        "Unauthenticated users are shown the login page",
+        "Authentication state is checked using the useInternetIdentity hook"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/ActiveWorkout.tsx",
+          "path": "frontend/src/components/Layout.tsx",
           "operation": "modify",
-          "description": "Add initialization logic in a useEffect hook on component mount to check localStorage for 'activeWorkoutSession' data. If found, restore session name state, exercise IDs, and all set data for each exercise. If localStorage data exists, prioritize it over URL search params. If no localStorage data exists, maintain the current behavior of loading exercises from URL params. Ensure the restored state populates all form fields and ExerciseTracker components correctly so users can continue their workout seamlessly after a page refresh."
+          "description": "Modify the Layout component to use the useInternetIdentity hook to check authentication state. When the user is not authenticated (isAuthenticated is false), redirect to the login page or render the Login component inline. When authenticated, render the existing layout with header, navigation, and footer as normal. Ensure the authentication check happens before rendering any protected content."
         }
       ]
     },
     {
-      "id": "REQ-27",
-      "summary": "Clear localStorage session data after successful workout save",
+      "id": "REQ-30",
+      "summary": "Add a logout button to the Layout component header that allows authenticated users to sign out and return to the login page",
       "acceptanceCriteria": [
-        "After successful completeSession mutation, remove the activeWorkoutSession data from localStorage",
-        "After clearing localStorage, the active workout state is also cleared as currently implemented",
-        "Starting a new workout session after completing one does not show data from the previous session"
+        "Logout button is visible in the header for authenticated users",
+        "Clicking logout clears the user's authentication session",
+        "After logout, user is returned to the login page"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/ActiveWorkout.tsx",
+          "path": "frontend/src/components/Layout.tsx",
           "operation": "modify",
-          "description": "Add localStorage.removeItem('activeWorkoutSession') call in the success handler of the completeSession mutation (after the backend save succeeds but before navigation or state clearing). This ensures persisted session data is cleaned up after a successful save, preventing stale data from appearing in future workout sessions. Do not modify the existing completeSession mutation logic or the current session clearing behavior."
+          "description": "Add a logout button in the header section of the Layout component for authenticated users. Use the useInternetIdentity hook's logout method to handle sign out. After logout, navigate the user to the login page. Style the button consistently with the app's design system using shadcn/ui Button component with appropriate variant."
+        }
+      ]
+    },
+    {
+      "id": "REQ-34",
+      "summary": "Update frontend query hooks to handle authentication requirements, ensuring backend calls only execute when user is authenticated and actor is available",
+      "acceptanceCriteria": [
+        "Query hooks check for authenticated state before making backend calls",
+        "Queries are disabled when actor is null or user is not authenticated",
+        "Loading and error states are properly handled for authentication scenarios"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Update all query hooks (useExercises, useWorkoutHistory, useSessionExercises, useWorkoutSessions) to check if the actor is available before executing queries. Add the 'enabled' option to each useQuery call to disable queries when actor is null. Ensure mutations (addExercise, editExercise, deleteExercise, createSession, addExerciseToSession, completeSession) properly handle cases where actor is unavailable by checking actor existence before execution."
         }
       ]
     }

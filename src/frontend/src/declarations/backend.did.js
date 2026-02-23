@@ -57,6 +57,7 @@ export const idlService = IDL.Service({
       [IDL.Vec(WorkoutExercise)],
       ['query'],
     ),
+  'getUserCount' : IDL.Func([], [IDL.Nat], ['query']),
   'getWorkoutHistory' : IDL.Func(
       [],
       [IDL.Vec(WorkoutSessionHistory)],
@@ -122,6 +123,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(WorkoutExercise)],
         ['query'],
       ),
+    'getUserCount' : IDL.Func([], [IDL.Nat], ['query']),
     'getWorkoutHistory' : IDL.Func(
         [],
         [IDL.Vec(WorkoutSessionHistory)],

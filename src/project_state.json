@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 19,
+  "projectStateVersion": 21,
   "summary": "Track-A-Swole: A workout tracking app to replace spreadsheets. Features include a custom exercise library where users can create exercise templates with default values for 3 sets (weight, reps, and comments per set), workout sessions where users select exercises from the library and edit the pre-populated values as they perform them, a 'done' button to add completed exercises to the session history, and workout history to view past sessions. Dark theme with modern design.",
   "architectural_notes": [
     "Workout sessions should store date, name, and array of exercises with set/weight/rep data",
@@ -10,11 +10,11 @@
     "Workout session saving: Single 'Save Session' button saves entire session with all exercises to history at once (not individual exercise 'done' buttons)",
     "History view structure: List of workout sessions (date/name) → expandable to show exercises → expandable to show set details (weight/reps/comments)",
     "After saving a session via 'Save Session' button, the active workout should be cleared/reset to allow starting a new session",
-    "Active workout session state should persist across page refreshes using localStorage or similar mechanism"
+    "Active workout session state should persist across page refreshes using localStorage or similar mechanism",
+    "Implement Internet Identity authentication to enable user-specific data storage and persistence",
+    "Backend must associate all workout data (exercise library, workout history) with authenticated user Principal ID"
   ],
-  "known_issues": [
-    "Page refresh during active workout clears session state - in-progress workout data is lost"
-  ],
+  "known_issues": [],
   "isFixRequest": true,
   "existing_features": [
     {
@@ -208,6 +208,30 @@
         "REQ-27"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-create-a-login-page-component-that-displays-when-user-is-not-authenticated-prompting-them-to-sign-in-with-internet-identity-and-providing-a-login-button-that-initiates-the-authentication-flow",
+      "title": "Create a login page component that displays when user is not authenticated, prompting them to sign in with Internet Identity and providing a login button that initiates the authentication flow",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-layout-component-in-frontend-src-components-layout-tsx-to-conditionally-render-main-app-navigation-only-for-authenticated-users-and-display-login-prompt-for-unauthenticated-users",
+      "title": "Update the Layout component in frontend/src/components/Layout.tsx to conditionally render main app navigation only for authenticated users, and display login prompt for unauthenticated users",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-logout-button-to-the-layout-component-header-that-allows-authenticated-users-to-sign-out-and-return-to-the-login-page",
+      "title": "Add a logout button to the Layout component header that allows authenticated users to sign out and return to the login page",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -299,6 +323,50 @@
       "id": "AR-20",
       "summary": "Implement session state persistence so active workout data survives page refreshes",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Implement Internet Identity (IID) authentication with login page supporting passkeys, Google, Apple, or Microsoft login methods",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Associate workout data (exercise library and workout history) with authenticated user identity in backend storage",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Modify the backend Exercise data structure in backend/main.mo to associate each exercise template with the user's Principal ID, ensuring exercises are stored per-user rather than globally",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Modify the backend WorkoutSession data structure in backend/main.mo to associate each workout session with the user's Principal ID, ensuring workout history is stored per-user rather than globally",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Update all backend methods in backend/main.mo (addExercise, editExercise, deleteExercise, getExercises, createSession, completeSession, getHistory) to use the caller's Principal for data isolation, ensuring each authenticated user only accesses their own data",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Update frontend query hooks in frontend/src/hooks/useQueries.ts to handle authentication requirements, ensuring backend calls only execute when user is authenticated and actor is available",
+      "reqIds": [
+        "REQ-34"
+      ],
       "status": "pending"
     }
   ],

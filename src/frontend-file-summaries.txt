@@ -1,6 +1,6 @@
 {
-  "frontend/src/App.tsx": "Main application component with TanStack Router setup, defining all routes including workout route with search param validation for exerciseIds.",
-  "frontend/src/components/Layout.tsx": "Layout wrapper component with header, bottom navigation bar, and footer, providing consistent navigation across all pages with active state highlighting.",
+  "frontend/src/App.tsx": "Main application component with TanStack Router setup, defining all routes including the new login route, workout route with search param validation for exerciseIds, and all other app pages.",
+  "frontend/src/components/Layout.tsx": "Layout wrapper component that checks authentication state, redirects unauthenticated users to login, displays a logout button in the header for authenticated users, and provides consistent navigation with header, bottom nav bar, and footer across all protected pages.",
   "frontend/src/pages/Home.tsx": "Landing page displaying welcome message and quick action cards for accessing main features like exercise library, creating sessions, and viewing history.",
   "frontend/src/pages/ExerciseLibrary.tsx": "Exercise library management page displaying exercise templates with full template data (name, sets, comments) and dialog for adding new templates.",
   "frontend/src/components/AddExerciseForm.tsx": "Form component for creating exercise templates with name input, 3 sets with weight/reps inputs, and comments field, now with explicit onClick handler on the submit button to ensure form submission is triggered properly.",
@@ -15,7 +15,8 @@
   "frontend/src/components/HistorySessionCard.tsx": "Card component for displaying workout session summary in history list with date, exercise count, and navigation to detail view.",
   "frontend/src/pages/SessionDetail.tsx": "Detailed view of a completed workout session showing all exercises with their sets, weights, reps, and comments.",
   "frontend/src/components/CompletedExerciseDisplay.tsx": "Read-only display component for completed exercises showing exercise details in a table format with comments section.",
-  "frontend/src/hooks/useQueries.ts": "Custom React Query hooks for all backend operations including useCompleteSession mutation that saves exercises to a session and properly invalidates cache, without attempting to call non-existent backend completion methods.",
+  "frontend/src/hooks/useQueries.ts": "Custom React Query hooks for all backend operations including exercise management, workout session creation, and history retrieval, with proper actor availability checks and cache invalidation.",
   "frontend/src/index.css": "Global styles with OKLCH color system customized for dark theme with amber/orange accent colors, avoiding typical blue/purple AI aesthetics.",
-  "frontend/tailwind.config.js": "Tailwind configuration with extended color palette using amber/orange theme colors and custom design tokens."
+  "frontend/tailwind.config.js": "Tailwind configuration with extended color palette using amber/orange theme colors and custom design tokens.",
+  "frontend/src/pages/Login.tsx": "Login page component that displays Track-A-Swole branding and a sign-in button to authenticate with Internet Identity, automatically redirecting to home after successful login."
 }

@@ -53,6 +53,7 @@ export interface _SERVICE {
   'getNextExerciseId' : ActorMethod<[], bigint>,
   'getNextSessionId' : ActorMethod<[], bigint>,
   'getSessionExercises' : ActorMethod<[bigint], Array<WorkoutExercise>>,
+  'getUserCount' : ActorMethod<[], bigint>,
   'getWorkoutHistory' : ActorMethod<[], Array<WorkoutSessionHistory>>,
   'getWorkoutSessionsByDate' : ActorMethod<[], Array<WorkoutSession>>,
   'removeExerciseFromSession' : ActorMethod<[bigint, bigint], undefined>,

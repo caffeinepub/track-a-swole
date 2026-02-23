@@ -6,6 +6,7 @@ import ActiveWorkout from './pages/ActiveWorkout';
 import WorkoutHistory from './pages/WorkoutHistory';
 import SessionDetail from './pages/SessionDetail';
 import Home from './pages/Home';
+import Login from './pages/Login';
 
 const rootRoute = createRootRoute({
   component: Layout,
@@ -15,6 +16,12 @@ const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   component: Home,
+});
+
+const loginRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/login',
+  component: Login,
 });
 
 const exercisesRoute = createRoute({
@@ -54,6 +61,7 @@ const sessionDetailRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
+  loginRoute,
   exercisesRoute,
   createSessionRoute,
   workoutRoute,

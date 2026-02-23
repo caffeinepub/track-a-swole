@@ -132,6 +132,7 @@ export interface backendInterface {
     getNextExerciseId(): Promise<bigint>;
     getNextSessionId(): Promise<bigint>;
     getSessionExercises(sessionId: bigint): Promise<Array<WorkoutExercise>>;
+    getUserCount(): Promise<bigint>;
     getWorkoutHistory(): Promise<Array<WorkoutSessionHistory>>;
     getWorkoutSessionsByDate(): Promise<Array<WorkoutSession>>;
     removeExerciseFromSession(sessionId: bigint, exerciseIndex: bigint): Promise<void>;
@@ -275,6 +276,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getSessionExercises(arg0);
+            return result;
+        }
+    }
+    async getUserCount(): Promise<bigint> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getUserCount();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getUserCount();
             return result;
         }
     }

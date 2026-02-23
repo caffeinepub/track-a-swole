@@ -1,11 +1,15 @@
 # Specification
 
 ## Summary
-**Goal:** Persist active workout session state across page refreshes so users don't lose their workout progress.
+**Goal:** Add Internet Identity authentication with user-specific data storage to ensure each user has their own private workout data and exercise history.
 
 **Planned changes:**
-- Save session name, exercise IDs, and all set data (weight, reps, comments) to localStorage whenever data changes in the ActiveWorkout page
-- Restore session state from localStorage on page load, prioritizing localStorage over URL params when both exist
-- Clear localStorage session data after successfully saving the workout to the backend
+- Create a login page component for unauthenticated users with Internet Identity sign-in
+- Update Layout component to conditionally show navigation for authenticated users only
+- Add logout button to the header for authenticated users
+- Modify backend Exercise data structure to associate each exercise template with user's Principal ID
+- Modify backend WorkoutSession data structure to associate workout history with user's Principal ID
+- Update all backend methods to use caller's Principal for data isolation
+- Update frontend query hooks to handle authentication requirements and only execute when user is authenticated
 
-**User-visible outcome:** Users can refresh the page during an active workout and continue exactly where they left off with all their entered data intact. After saving a completed workout, the session is cleared and ready for a new workout.
+**User-visible outcome:** Users will be required to sign in with Internet Identity before accessing the app. Each user will have their own private exercise templates and workout history that only they can access. Users can log out and their data will remain private and secure.

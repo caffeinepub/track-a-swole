@@ -1,43 +1,82 @@
 import Map "mo:core/Map";
 import Nat "mo:core/Nat";
+import Principal "mo:core/Principal";
 
 module {
-  type OldExercise = {
-    id : Nat;
-    name : Text;
-  };
-
   type OldActor = {
-    exerciseLibrary : Map.Map<Nat, OldExercise>;
-  };
-
-  type Set = {
-    weight : Nat;
-    reps : Nat;
-  };
-
-  type NewExercise = {
-    id : Nat;
-    name : Text;
-    sets : [Set];
-    comments : Text;
+    exerciseLibrary : Map.Map<Nat, {
+      id : Nat;
+      name : Text;
+      sets : [{
+        weight : Nat;
+        reps : Nat;
+      }];
+      comments : Text;
+    }>;
+    workoutSessions : Map.Map<Nat, {
+      id : Nat;
+      name : Text;
+      date : Int;
+      exercises : [{
+        exerciseId : Nat;
+        exerciseName : Text;
+        weight : Float;
+        reps : Nat;
+        sets : Nat;
+        comments : Text;
+      }];
+      isCompleted : Bool;
+    }>;
   };
 
   type NewActor = {
-    exerciseLibrary : Map.Map<Nat, NewExercise>;
+    exerciseLibrary : Map.Map<Principal, Map.Map<Nat, {
+      id : Nat;
+      name : Text;
+      sets : [{
+        weight : Nat;
+        reps : Nat;
+      }];
+      comments : Text;
+    }>>;
+    workoutSessions : Map.Map<Principal, Map.Map<Nat, {
+      id : Nat;
+      name : Text;
+      date : Int;
+      exercises : [{
+        exerciseId : Nat;
+        exerciseName : Text;
+        weight : Float;
+        reps : Nat;
+        sets : Nat;
+        comments : Text;
+      }];
+      isCompleted : Bool;
+    }>>;
   };
 
-  public func run(old : OldActor) : NewActor {
-    let newExerciseLibrary = old.exerciseLibrary.map<Nat, OldExercise, NewExercise>(
-      func(_id, oldExercise) {
-        let defaultSets : [Set] = [defaultSet(), defaultSet(), defaultSet()];
-        { oldExercise with sets = defaultSets; comments = "" };
-      }
-    );
-    { exerciseLibrary = newExerciseLibrary };
-  };
-
-  func defaultSet() : Set {
-    { weight = 0; reps = 0 };
+  public func run(_old : OldActor) : NewActor {
+    let emptyPrinicipalMap = Map.empty<Principal, Map.Map<Nat, { id : Nat; name : Text; sets : [{
+                          weight : Nat;
+                          reps : Nat;
+    }]; comments : Text }>>();
+    let emptySessionMap = Map.empty<Principal, Map.Map<Nat, {
+      id : Nat;
+      name : Text;
+      date : Int;
+      exercises : [{
+        exerciseId : Nat;
+        exerciseName : Text;
+        weight : Float;
+        reps : Nat;
+        sets : Nat;
+        comments : Text;
+      }];
+      isCompleted : Bool;
+    }>>();
+    {
+      exerciseLibrary = emptyPrinicipalMap;
+      workoutSessions = emptySessionMap;
+    };
   };
 };

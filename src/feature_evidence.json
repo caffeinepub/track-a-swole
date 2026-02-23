@@ -2,10 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-activeworkout-page-in-frontend-src-pages-activeworkout-tsx-to-persist-the-current-workout-session-state-session-name-selected-exercise-ids-and-all-entered-set-data-including-weight-reps-and-comments-for-each-exercise-to-localstorage-whenever-any-data-changes",
-      "featureTitle": "Update the ActiveWorkout page in frontend/src/pages/ActiveWorkout.tsx to persist the current workout session state (session name, selected exercise IDs, and all entered set data including weight, reps, and comments for each exercise) to localStorage whenever any data changes",
+      "featureId": "feature-create-a-login-page-component-that-displays-when-user-is-not-authenticated-prompting-them-to-sign-in-with-internet-identity-and-providing-a-login-button-that-initiates-the-authentication-flow",
+      "featureTitle": "Create a login page component that displays when user is not authenticated, prompting them to sign in with Internet Identity and providing a login button that initiates the authentication flow",
       "files": [
-        "frontend/src/pages/ActiveWorkout.tsx"
+        "frontend/src/App.tsx",
+        "frontend/src/pages/Login.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -15,15 +16,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-25"
+        "REQ-28"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-the-activeworkout-page-in-frontend-src-pages-activeworkout-tsx-to-restore-the-persisted-workout-session-state-from-localstorage-on-component-mount-if-available-prioritizing-localstorage-data-over-url-params-when-both-exist",
-      "featureTitle": "Update the ActiveWorkout page in frontend/src/pages/ActiveWorkout.tsx to restore the persisted workout session state from localStorage on component mount if available, prioritizing localStorage data over URL params when both exist",
+      "featureId": "feature-update-the-layout-component-in-frontend-src-components-layout-tsx-to-conditionally-render-main-app-navigation-only-for-authenticated-users-and-display-login-prompt-for-unauthenticated-users",
+      "featureTitle": "Update the Layout component in frontend/src/components/Layout.tsx to conditionally render main app navigation only for authenticated users, and display login prompt for unauthenticated users",
       "files": [
-        "frontend/src/pages/ActiveWorkout.tsx"
+        "frontend/src/components/Layout.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -33,15 +34,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-26"
+        "REQ-29"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-the-activeworkout-page-in-frontend-src-pages-activeworkout-tsx-to-clear-the-persisted-session-data-from-localstorage-after-the-save-session-button-successfully-saves-the-workout-to-the-backend",
-      "featureTitle": "Update the ActiveWorkout page in frontend/src/pages/ActiveWorkout.tsx to clear the persisted session data from localStorage after the 'Save Session' button successfully saves the workout to the backend",
+      "featureId": "feature-add-a-logout-button-to-the-layout-component-header-that-allows-authenticated-users-to-sign-out-and-return-to-the-login-page",
+      "featureTitle": "Add a logout button to the Layout component header that allows authenticated users to sign out and return to the login page",
       "files": [
-        "frontend/src/pages/ActiveWorkout.tsx"
+        "frontend/src/components/Layout.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -51,7 +52,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-27"
+        "REQ-30"
       ],
       "confidence": "high"
     }

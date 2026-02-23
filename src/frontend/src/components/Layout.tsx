@@ -1,14 +1,56 @@
-import { Link, Outlet, useRouterState } from '@tanstack/react-router';
-import { Dumbbell, Library, Plus, History, Home } from 'lucide-react';
+import { Link, Outlet, useRouterState, useNavigate } from '@tanstack/react-router';
+import { Dumbbell, Library, Plus, History, Home, LogOut } from 'lucide-react';
+import { useInternetIdentity } from '../hooks/useInternetIdentity';
+import { Button } from '@/components/ui/button';
+import { useEffect } from 'react';
 
 export default function Layout() {
   const routerState = useRouterState();
+  const navigate = useNavigate();
   const currentPath = routerState.location.pathname;
+  const { identity, clear, isInitializing } = useInternetIdentity();
+
+  const isAuthenticated = !!identity && !identity.getPrincipal().isAnonymous();
+
+  useEffect(() => {
+    if (!isInitializing && !isAuthenticated && currentPath !== '/login') {
+      navigate({ to: '/login' });
+    }
+  }, [isInitializing, isAuthenticated, currentPath, navigate]);
+
+  const handleLogout = () => {
+    clear();
+    navigate({ to: '/login' });
+  };
 
   const isActive = (path: string) => {
     if (path === '/') return currentPath === '/';
     return currentPath.startsWith(path);
   };
+
+  // Show login page without layout chrome
+  if (currentPath === '/login') {
+    return <Outlet />;
+  }
+
+  // Show loading state while checking authentication
+  if (isInitializing) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="bg-gradient-to-br from-amber-500 to-orange-600 p-4 rounded-2xl shadow-lg inline-block">
+            <Dumbbell className="h-12 w-12 text-white animate-pulse" />
+          </div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect to login if not authenticated (handled by useEffect)
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -23,6 +65,15 @@ export default function Layout() {
                 Track-A-Swole
               </h1>
             </Link>
+            <Button
+              onClick={handleLogout}
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Logout
+            </Button>
           </div>
         </div>
       </header>
