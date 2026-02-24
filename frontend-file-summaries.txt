@@ -1,0 +1,22 @@
+{
+  "frontend/src/App.tsx": "Main application component with TanStack Router setup, defining all routes including the new login route, workout route with search param validation for exerciseIds, and all other app pages.",
+  "frontend/src/components/Layout.tsx": "Layout wrapper component that checks authentication state, redirects unauthenticated users to login, displays a logout button in the header for authenticated users, and provides consistent navigation with header, bottom nav bar, and footer across all protected pages.",
+  "frontend/src/pages/Home.tsx": "Landing page displaying welcome message and quick action cards for accessing main features like exercise library, creating sessions, and viewing history.",
+  "frontend/src/pages/ExerciseLibrary.tsx": "Exercise library management page displaying exercise templates with full template data (name, sets, comments) and dialog for adding new templates.",
+  "frontend/src/components/AddExerciseForm.tsx": "Form component for creating exercise templates with name input, 3 sets with weight/reps inputs, and comments field, now with explicit onClick handler on the submit button to ensure form submission is triggered properly.",
+  "frontend/src/components/ExerciseListItem.tsx": "Exercise template list item displaying full template data (name, 3 sets with weight/reps, comments) with inline editing for name and delete functionality.",
+  "frontend/src/pages/CreateSession.tsx": "Workout session creation page with functional state updates using updater functions, toast feedback when exercises are added, and proper state management for exercise selection.",
+  "frontend/src/components/ExercisePicker.tsx": "Dropdown selector for choosing exercise templates from library with improved bigint key handling and early return guard in handleAdd function.",
+  "frontend/src/components/SessionExerciseList.tsx": "List component displaying selected exercise templates with proper bigint-to-string conversion for React keys and reorder/remove functionality.",
+  "frontend/src/pages/ActiveWorkout.tsx": "Active workout tracking page that persists exercise data (sets, weights, reps, comments) to localStorage on every change, restores session state from localStorage on mount if available (prioritizing it over URL params), and clears localStorage after successful session save before navigating to history.",
+  "frontend/src/components/ExerciseTracker.tsx": "Collapsible exercise tracker component with 3 sets of weight/reps inputs and comments field, now without a Done button and using controlled props for state management.",
+  "frontend/src/components/SetInputRow.tsx": "Individual set input row displaying set number with weight and reps input fields, supporting disabled state for completed exercises.",
+  "frontend/src/pages/WorkoutHistory.tsx": "Workout history page that fetches and displays completed workout sessions using the useWorkoutHistory query hook, with proper loading states, error handling, and empty state messaging.",
+  "frontend/src/components/HistorySessionCard.tsx": "Card component for displaying workout session summary in history list with date, exercise count, and navigation to detail view.",
+  "frontend/src/pages/SessionDetail.tsx": "Detailed view of a completed workout session showing all exercises with their sets, weights, reps, and comments.",
+  "frontend/src/components/CompletedExerciseDisplay.tsx": "Read-only display component for completed exercises showing exercise details in a table format with comments section.",
+  "frontend/src/hooks/useQueries.ts": "Custom React Query hooks for all backend operations. The `useWorkoutHistory` hook now falls back to `getWorkoutSessionsByDate` and filters for sessions with at least one exercise (since the backend has no `completeWorkoutSession` endpoint to set `isCompleted=true`), mapping results to `WorkoutSessionHistory` shape and sorting most-recent first.",
+  "frontend/src/index.css": "Global styles with OKLCH color system customized for dark theme with amber/orange accent colors, avoiding typical blue/purple AI aesthetics.",
+  "frontend/tailwind.config.js": "Tailwind configuration with extended color palette using amber/orange theme colors and custom design tokens.",
+  "frontend/src/pages/Login.tsx": "Login page component that displays Track-A-Swole branding and a sign-in button to authenticate with Internet Identity, automatically redirecting to home after successful login."
+}

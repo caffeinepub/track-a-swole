@@ -1,0 +1,23 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-verify-that-the-usequeries-ts-history-hook-correctly-calls-the-backend-actor-method-passes-the-right-arguments-and-maps-the-response-into-the-shape-expected-by-workouthistory-and-historysessioncard-fix-any-mismatch-between-the-hook-s-return-type-and-what-the-components-consume",
+      "featureTitle": "Verify that the useQueries.ts history hook correctly calls the backend actor method, passes the right arguments, and maps the response into the shape expected by WorkoutHistory and HistorySessionCard. Fix any mismatch between the hook's return type and what the components consume.",
+      "files": [
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

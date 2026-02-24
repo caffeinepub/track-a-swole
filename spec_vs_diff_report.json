@@ -1,0 +1,26 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-24T20:37:04.815Z",
+  "summary": "The diff modifies backend/main.mo, frontend/src/hooks/useQueries.ts, frontend-file-summaries.txt, and project_state.json. The changes address all three requirements to varying degrees. REQ-1 (WorkoutHistory page with loading/error/empty states) is addressed via the updated WorkoutHistory.tsx described in file summaries. REQ-2 (backend getWorkoutHistory returning sessions in reverse-chronological order) has partial evidence — the backend adds a WorkoutSessionHistory type with a date comparator but no dedicated getWorkoutHistory query filtering isCompleted is confirmed. REQ-3 (useQueries.ts hook correctness) is addressed with the useWorkoutHistory hook falling back to getWorkoutSessionsByDate, filtering sessions with at least one exercise, sorting most-recent-first, and invalidating the history cache on completion.",
+  "missing_requirements": [
+    {
+      "id": "REQ-2",
+      "requirement": "Backend getWorkoutHistory query must return only completed sessions for the calling Principal in reverse-chronological order.",
+      "reason": "The backend diff shows a WorkoutSessionHistory type and date comparator were added, but there is no confirmed evidence of a dedicated getWorkoutHistory function filtering by isCompleted=true and returning results in strict reverse-chronological order. The frontend hook works around this by filtering sessions with at least one exercise rather than using the isCompleted flag, meaning the AC for returning only completed sessions and reverse-chronological ordering from the backend is not definitively met.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend-file-summaries.txt"
+      ]
+    }
+  ],
+  "hallucinated_features": [],
+  "confidence": 0.62,
+  "changed_files": [
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/src/hooks/useQueries.ts",
+    "project_state.json"
+  ]
+}

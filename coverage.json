@@ -1,0 +1,56 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-24T20:37:04.818Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 3,
+    "implemented": 1,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Diagnose and fix the WorkoutHistory page so that completed workout sessions are actually fetched from the backend and rendered. The page should display all past sessions via HistorySessionCard components, with proper loading, error, and empty states.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/pages/WorkoutHistory.tsx",
+          "frontend/src/components/HistorySessionCard.tsx"
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Verify that the backend getWorkoutHistory (or equivalent) query function correctly returns completed sessions for the calling Principal. If the backend stores sessions but the query returns an empty or incorrect result, fix the retrieval logic so sessions saved under the user's Principal are returned in reverse-chronological order.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Verify that the useQueries.ts history hook correctly calls the backend actor method, passes the right arguments, and maps the response into the shape expected by WorkoutHistory and HistorySessionCard. Fix any mismatch between the hook's return type and what the components consume.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useQueries.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useQueries.ts"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/main.mo",
+    "build-request.json",
+    "caffeine.lock.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/hooks/useQueries.ts",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

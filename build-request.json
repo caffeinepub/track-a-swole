@@ -1,0 +1,79 @@
+{
+  "kind": "build_request",
+  "title": "Fix History section not displaying completed workout sessions",
+  "projectName": "Track-A-Swole",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Diagnose and fix the WorkoutHistory page so that completed workout sessions are actually fetched from the backend and rendered. The page should display all past sessions via HistorySessionCard components, with proper loading, error, and empty states.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "The 'History' section doesn't display history."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Navigating to the History route shows all completed workout sessions the authenticated user has recorded.",
+        "Each session is rendered as a HistorySessionCard showing date, name, and exercise count.",
+        "A loading spinner or skeleton is shown while data is being fetched.",
+        "An appropriate empty-state message is shown when no sessions exist.",
+        "An error message is shown if the backend call fails."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Verify that the backend getWorkoutHistory (or equivalent) query function correctly returns completed sessions for the calling Principal. If the backend stores sessions but the query returns an empty or incorrect result, fix the retrieval logic so sessions saved under the user's Principal are returned in reverse-chronological order.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "The 'History' section doesn't display history."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Calling the history query with an authenticated Principal that has completed sessions returns a non-empty list of those sessions.",
+        "Sessions are returned in reverse-chronological order (most recent first).",
+        "An unauthenticated or new Principal receives an empty list without error."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Verify that the useQueries.ts history hook correctly calls the backend actor method, passes the right arguments, and maps the response into the shape expected by WorkoutHistory and HistorySessionCard. Fix any mismatch between the hook's return type and what the components consume.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "The 'History' section doesn't display history."
+        ]
+      },
+      "acceptanceCriteria": [
+        "The React Query history hook is enabled only when an authenticated actor is available.",
+        "The data returned by the hook is correctly typed and consumed by WorkoutHistory without runtime errors.",
+        "Cache invalidation triggers a refetch after a new workout session is completed."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui.",
+    "Keep all Motoko logic in backend/main.mo (single-actor architecture).",
+    "Only generate migration.mo if the backend data model changes require a state migration."
+  ],
+  "nonGoals": [
+    "Fixing Internet Identity login/session persistence (separate known issue).",
+    "Adding the swoleAF.mp4 video mascot to the login page.",
+    "Adding new workout history filtering or search features.",
+    "Changing the visual design of the History page beyond what is needed to display data."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

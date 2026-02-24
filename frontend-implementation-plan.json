@@ -1,0 +1,46 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Fix History section not displaying completed workout sessions",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Diagnose and fix the WorkoutHistory page so that completed workout sessions are fetched from the backend and rendered with proper loading, error, and empty states",
+      "acceptanceCriteria": [
+        "Navigating to the History route shows all completed workout sessions the authenticated user has recorded.",
+        "Each session is rendered as a HistorySessionCard showing date, name, and exercise count.",
+        "A loading spinner or skeleton is shown while data is being fetched.",
+        "An appropriate empty-state message is shown when no sessions exist.",
+        "An error message is shown if the backend call fails."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/WorkoutHistory.tsx",
+          "operation": "modify",
+          "description": "Fix the WorkoutHistory component to properly fetch and display completed workout sessions. Ensure the history hook from useQueries is correctly invoked with the authenticated actor, handle loading/error/empty states appropriately, and map the returned WorkoutSessionHistory array to HistorySessionCard components. Verify that only sessions with isCompleted=true are displayed, and that the data structure matches what HistorySessionCard expects (id, date, name, exercises array)."
+        },
+        {
+          "path": "frontend/src/components/HistorySessionCard.tsx",
+          "operation": "modify",
+          "description": "Verify and fix the HistorySessionCard component to correctly consume WorkoutSessionHistory data. Ensure the component properly displays the session date (formatting the bigint timestamp), name, and exercise count (exercises.length). Confirm navigation to the session detail page uses the correct route and session ID."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Verify that the useQueries.ts history hook correctly calls the backend getWorkoutHistory method and maps the response to the shape expected by WorkoutHistory and HistorySessionCard",
+      "acceptanceCriteria": [
+        "The React Query history hook is enabled only when an authenticated actor is available.",
+        "The data returned by the hook is correctly typed and consumed by WorkoutHistory without runtime errors.",
+        "Cache invalidation triggers a refetch after a new workout session is completed."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Fix the history query hook to properly call actor.getWorkoutHistory() and return the correct data structure. Ensure the query is enabled only when the actor exists and the user is authenticated. Verify the return type matches Array<WorkoutSessionHistory> from backend.d.ts. Add proper cache invalidation so that when a workout session is marked as completed (via the relevant mutation), the history query is invalidated and refetches. Confirm error handling and loading states are properly exposed."
+        }
+      ]
+    }
+  ]
+}
