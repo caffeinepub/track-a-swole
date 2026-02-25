@@ -1,14 +1,26 @@
 import { Link } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dumbbell, Library, Plus, History, TrendingUp } from 'lucide-react';
+import { Library, Plus, History, TrendingUp } from 'lucide-react';
 
 export default function Home() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="text-center space-y-4 py-8">
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl shadow-xl mb-4">
-          <Dumbbell className="h-10 w-10 text-white" />
+        <div className="flex items-center justify-center mb-4">
+          <img
+            src="/swolegoat.gif"
+            alt="Swole Goat mascot"
+            className="w-40 h-40 object-contain rounded-2xl shadow-xl"
+            onError={(e) => {
+              const target = e.currentTarget;
+              if (target.src.endsWith('/swolegoat.gif')) {
+                target.src = '/assets/swolegoat.gif';
+              } else if (target.src.endsWith('/assets/swolegoat.gif')) {
+                target.src = '/assets/generated/swolegoat.gif';
+              }
+            }}
+          />
         </div>
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
           Welcome to <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">Track-A-Swole</span>

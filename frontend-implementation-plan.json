@@ -1,44 +1,68 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix History section not displaying completed workout sessions",
+  "title": "Fix perpetual spinner and broken Add Exercise functionality on Manage Exercise page",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Diagnose and fix the WorkoutHistory page so that completed workout sessions are fetched from the backend and rendered with proper loading, error, and empty states",
+      "summary": "Fix ExerciseLibrary page perpetual loading spinner by ensuring the loading state resolves after backend query completes or errors",
       "acceptanceCriteria": [
-        "Navigating to the History route shows all completed workout sessions the authenticated user has recorded.",
-        "Each session is rendered as a HistorySessionCard showing date, name, and exercise count.",
-        "A loading spinner or skeleton is shown while data is being fetched.",
-        "An appropriate empty-state message is shown when no sessions exist.",
-        "An error message is shown if the backend call fails."
+        "After logging in and navigating to the Exercise Library / Manage Exercise page, the loading spinner resolves within a reasonable time (< 10 seconds).",
+        "If the backend call succeeds, the exercise list is displayed.",
+        "If the backend call fails, an error message is shown instead of an infinite spinner."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/WorkoutHistory.tsx",
+          "path": "frontend/src/pages/ExerciseLibrary.tsx",
           "operation": "modify",
-          "description": "Fix the WorkoutHistory component to properly fetch and display completed workout sessions. Ensure the history hook from useQueries is correctly invoked with the authenticated actor, handle loading/error/empty states appropriately, and map the returned WorkoutSessionHistory array to HistorySessionCard components. Verify that only sessions with isCompleted=true are displayed, and that the data structure matches what HistorySessionCard expects (id, date, name, exercises array)."
+          "description": "Fix the loading state logic to properly handle both success and error states from the useGetExercises query. Ensure the spinner resolves when data is loaded or when an error occurs. Add explicit error state rendering with an error message when the query fails. Verify that the loading condition checks both isLoading and isFetching states appropriately."
         },
         {
-          "path": "frontend/src/components/HistorySessionCard.tsx",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Verify and fix the HistorySessionCard component to correctly consume WorkoutSessionHistory data. Ensure the component properly displays the session date (formatting the bigint timestamp), name, and exercise count (exercises.length). Confirm navigation to the session detail page uses the correct route and session ID."
+          "description": "Review and fix the useGetExercises hook to ensure it properly transitions out of loading state. Verify the query is not stuck in a permanent loading state due to actor initialization issues. Ensure the enabled condition correctly checks actor availability and that the query function properly awaits the actor call and handles rejections."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Fix the Add Exercise button to respond to clicks and open the AddExerciseForm dialog when authenticated",
+      "acceptanceCriteria": [
+        "Clicking 'Add Exercise' while authenticated opens the AddExerciseForm dialog.",
+        "Submitting the form with valid data successfully calls the backend and adds the exercise.",
+        "The exercise list updates after a successful add without requiring a page reload."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/ExerciseLibrary.tsx",
+          "operation": "modify",
+          "description": "Fix the Add Exercise button click handler to properly toggle the dialog open state. Verify the button is not disabled when it should be enabled and that the onClick event is properly bound. Ensure the dialog state management allows the AddExerciseForm to be displayed when the button is clicked."
+        },
+        {
+          "path": "frontend/src/components/AddExerciseForm.tsx",
+          "operation": "modify",
+          "description": "Verify the form submission flow properly calls the useAddExercise mutation and handles success/error states. Ensure the onSuccess callback (if passed from parent) is invoked to close the dialog and that cache invalidation triggers a refetch of the exercise list."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Review and fix the useAddExercise mutation hook to ensure it properly awaits the actor and calls the backend addExercise method. Verify that onSuccess invalidates the exercises query cache to trigger a list refresh, and that any errors are properly surfaced rather than silently failing."
         }
       ]
     },
     {
       "id": "REQ-3",
-      "summary": "Verify that the useQueries.ts history hook correctly calls the backend getWorkoutHistory method and maps the response to the shape expected by WorkoutHistory and HistorySessionCard",
+      "summary": "Audit exercise-related query hooks to ensure actor initialization is awaited before canister calls and error states are properly surfaced",
       "acceptanceCriteria": [
-        "The React Query history hook is enabled only when an authenticated actor is available.",
-        "The data returned by the hook is correctly typed and consumed by WorkoutHistory without runtime errors.",
-        "Cache invalidation triggers a refetch after a new workout session is completed."
+        "Exercise-related React Query hooks do not enter a permanent loading state when the actor is available.",
+        "Any canister call error is caught and causes the query/mutation to transition to an error state.",
+        "The actor is confirmed to be initialized before any canister call is attempted; if not yet ready, the query is disabled rather than hanging."
       ],
       "file_operations": [
         {
           "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Fix the history query hook to properly call actor.getWorkoutHistory() and return the correct data structure. Ensure the query is enabled only when the actor exists and the user is authenticated. Verify the return type matches Array<WorkoutSessionHistory> from backend.d.ts. Add proper cache invalidation so that when a workout session is marked as completed (via the relevant mutation), the history query is invalidated and refetches. Confirm error handling and loading states are properly exposed."
+          "description": "Audit all exercise-related hooks (useGetExercises, useAddExercise, useEditExercise, useDeleteExercise) to ensure: 1) Queries are disabled when actor is null/undefined using the enabled option, 2) The queryFn/mutationFn properly awaits the actor call and wraps it in try-catch to surface errors, 3) No hanging promises that never resolve or reject, 4) Proper error propagation to React Query's error state. Add explicit null checks for the actor before making any canister calls."
         }
       ]
     }

@@ -1,7 +1,7 @@
 import { useInternetIdentity } from '../hooks/useInternetIdentity';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dumbbell, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useEffect } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 
@@ -16,13 +16,23 @@ export default function Login() {
   }, [isLoginSuccess, identity, navigate]);
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
       <Card className="w-full max-w-md border-border shadow-xl">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
-            <div className="bg-gradient-to-br from-amber-500 to-orange-600 p-4 rounded-2xl shadow-lg">
-              <Dumbbell className="h-12 w-12 text-white" />
-            </div>
+            <img
+              src="/swolegoat.gif"
+              alt="Swole Goat mascot"
+              className="h-40 w-40 object-contain"
+              onError={(e) => {
+                const target = e.currentTarget;
+                if (target.src.endsWith('/swolegoat.gif')) {
+                  target.src = '/assets/swolegoat.gif';
+                } else if (target.src.endsWith('/assets/swolegoat.gif')) {
+                  target.src = '/assets/generated/swolegoat.gif';
+                }
+              }}
+            />
           </div>
           <div>
             <CardTitle className="text-3xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
@@ -61,6 +71,20 @@ export default function Login() {
           </p>
         </CardContent>
       </Card>
+
+      {/* GeekGoat Footer */}
+      <footer className="mt-8 flex items-center gap-3">
+        <div className="h-12 w-12 rounded-full overflow-hidden border-2 border-amber-500/60 shadow-md shadow-amber-500/20 flex-shrink-0">
+          <img
+            src="/assets/GeekGoat.png"
+            alt="GeekGoat"
+            className="h-full w-full object-cover"
+          />
+        </div>
+        <span className="text-sm text-muted-foreground font-medium">
+          A GeekDice Decentralized App on ICP
+        </span>
+      </footer>
     </div>
   );
 }

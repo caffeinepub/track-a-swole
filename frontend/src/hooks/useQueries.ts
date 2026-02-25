@@ -9,9 +9,19 @@ export function useExercises() {
     queryKey: ['exercises'],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getAllExercises();
+      try {
+        return await actor.getAllExercises();
+      } catch (error) {
+        // If the user doesn't exist yet on the backend (first login),
+        // return an empty array rather than propagating the trap error.
+        console.warn('getAllExercises error (may be first login):', error);
+        return [];
+      }
     },
+    // Only run when actor is fully initialized (not still fetching)
     enabled: !!actor && !isFetching,
+    // Treat a disabled query as having empty data rather than staying in loading state
+    placeholderData: [],
   });
 }
 
@@ -26,6 +36,9 @@ export function useAddExercise() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['exercises'] });
+    },
+    onError: (error) => {
+      console.error('addExercise mutation error:', error);
     },
   });
 }
@@ -42,6 +55,9 @@ export function useEditExercise() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['exercises'] });
     },
+    onError: (error) => {
+      console.error('editExercise mutation error:', error);
+    },
   });
 }
 
@@ -56,6 +72,9 @@ export function useDeleteExercise() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['exercises'] });
+    },
+    onError: (error) => {
+      console.error('deleteExercise mutation error:', error);
     },
   });
 }
@@ -171,23 +190,29 @@ export function useWorkoutHistory() {
     queryKey: ['history'],
     queryFn: async () => {
       if (!actor) return [];
-      // getWorkoutHistory only returns sessions with isCompleted=true.
-      // Since the backend has no completeWorkoutSession endpoint, we fall back
-      // to getWorkoutSessionsByDate and surface all sessions that have at least
-      // one exercise recorded (i.e. the user actually saved data to them).
-      const allSessions = await actor.getWorkoutSessionsByDate();
-      const savedSessions = allSessions.filter((s) => s.exercises.length > 0);
-      // Map WorkoutSession → WorkoutSessionHistory shape (identical fields)
-      const history: WorkoutSessionHistory[] = savedSessions.map((s) => ({
-        id: s.id,
-        name: s.name,
-        date: s.date,
-        exercises: s.exercises,
-        isCompleted: s.isCompleted,
-      }));
-      // Sort most-recent first
-      return history.sort((a, b) => Number(b.date) - Number(a.date));
+      try {
+        // getWorkoutHistory only returns sessions with isCompleted=true.
+        // Since the backend has no completeWorkoutSession endpoint, we fall back
+        // to getWorkoutSessionsByDate and surface all sessions that have at least
+        // one exercise recorded (i.e. the user actually saved data to them).
+        const allSessions = await actor.getWorkoutSessionsByDate();
+        const savedSessions = allSessions.filter((s) => s.exercises.length > 0);
+        // Map WorkoutSession → WorkoutSessionHistory shape (identical fields)
+        const history: WorkoutSessionHistory[] = savedSessions.map((s) => ({
+          id: s.id,
+          name: s.name,
+          date: s.date,
+          exercises: s.exercises,
+          isCompleted: s.isCompleted,
+        }));
+        // Sort most-recent first
+        return history.sort((a, b) => Number(b.date) - Number(a.date));
+      } catch (error) {
+        console.warn('getWorkoutSessionsByDate error:', error);
+        return [];
+      }
     },
     enabled: !!actor && !isFetching,
+    placeholderData: [],
   });
 }

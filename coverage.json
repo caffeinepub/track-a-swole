@@ -1,35 +1,45 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-24T20:37:04.818Z",
+  "generatedAt": "2026-02-25T23:42:44.549Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
     "total": 3,
-    "implemented": 1,
+    "implemented": 3,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Diagnose and fix the WorkoutHistory page so that completed workout sessions are actually fetched from the backend and rendered. The page should display all past sessions via HistorySessionCard components, with proper loading, error, and empty states.",
-        "status": "missing",
+        "summary": "Investigate and fix the ExerciseLibrary page so it no longer shows a perpetual spinning orange loading indicator after a user logs in. The page should resolve its loading state and render the exercise list (or an empty state) once the backend query completes or errors.",
+        "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/WorkoutHistory.tsx",
-          "frontend/src/components/HistorySessionCard.tsx"
+          "frontend/src/pages/ExerciseLibrary.tsx",
+          "frontend/src/hooks/useQueries.ts"
         ],
-        "matchedFiles": []
+        "matchedFiles": [
+          "frontend/src/pages/ExerciseLibrary.tsx",
+          "frontend/src/hooks/useQueries.ts"
+        ]
       },
       {
         "id": "REQ-2",
-        "summary": "Verify that the backend getWorkoutHistory (or equivalent) query function correctly returns completed sessions for the calling Principal. If the backend stores sessions but the query returns an empty or incorrect result, fix the retrieval logic so sessions saved under the user's Principal are returned in reverse-chronological order.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
+        "summary": "Investigate and fix the 'Add Exercise' button on the Exercise Library page so it responds to user clicks and opens the Add Exercise dialog/form. The button must be functional after the user is authenticated.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/ExerciseLibrary.tsx",
+          "frontend/src/components/AddExerciseForm.tsx",
+          "frontend/src/hooks/useQueries.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/ExerciseLibrary.tsx",
+          "frontend/src/hooks/useQueries.ts"
+        ]
       },
       {
         "id": "REQ-3",
-        "summary": "Verify that the useQueries.ts history hook correctly calls the backend actor method, passes the right arguments, and maps the response into the shape expected by WorkoutHistory and HistorySessionCard. Fix any mismatch between the hook's return type and what the components consume.",
+        "summary": "Audit the useQueries.ts hooks related to exercise fetching and mutation (getExercises, addExercise, etc.) to ensure actor initialization is awaited correctly before making canister calls, and that query/mutation error states are properly surfaced rather than silently hanging.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/hooks/useQueries.ts"
@@ -41,13 +51,12 @@
     ]
   },
   "changedFiles": [
-    "backend/main.mo",
     "build-request.json",
-    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
     "frontend/src/hooks/useQueries.ts",
+    "frontend/src/pages/ExerciseLibrary.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

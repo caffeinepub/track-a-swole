@@ -1,5 +1,5 @@
 import { Link, Outlet, useRouterState, useNavigate } from '@tanstack/react-router';
-import { Dumbbell, Library, Plus, History, Home, LogOut } from 'lucide-react';
+import { Library, Plus, History, Home, LogOut } from 'lucide-react';
 import { useInternetIdentity } from '../hooks/useInternetIdentity';
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
@@ -38,8 +38,12 @@ export default function Layout() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-4">
-          <div className="bg-gradient-to-br from-amber-500 to-orange-600 p-4 rounded-2xl shadow-lg inline-block">
-            <Dumbbell className="h-12 w-12 text-white animate-pulse" />
+          <div className="h-16 w-16 rounded-full overflow-hidden mx-auto animate-pulse">
+            <img
+              src="/assets/generated/goatbuff.dim_400x400.png"
+              alt="GoatBuff"
+              className="h-full w-full object-cover"
+            />
           </div>
           <p className="text-muted-foreground">Loading...</p>
         </div>
@@ -58,8 +62,12 @@ export default function Layout() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="bg-gradient-to-br from-amber-500 to-orange-600 p-2.5 rounded-xl shadow-lg group-hover:shadow-amber-500/20 transition-shadow">
-                <Dumbbell className="h-6 w-6 text-white" />
+              <div className="h-11 w-11 rounded-full overflow-hidden ring-2 ring-amber-500/40 flex-shrink-0">
+                <img
+                  src="/assets/generated/goatbuff.dim_400x400.png"
+                  alt="GoatBuff"
+                  className="h-full w-full object-cover"
+                />
               </div>
               <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
                 Track-A-Swole

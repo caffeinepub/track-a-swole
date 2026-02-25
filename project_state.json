@@ -1,47 +1,44 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Workout tracker app built on Internet Computer with Internet Identity login. Current issues include broken login/session persistence, failed video mascot upload (swoleAF.mp4), and History section not displaying completed workout sessions.",
+  "summary": "Fitness app with exercise management functionality. Currently investigating a bug where the Manage Exercise page shows a perpetual spinning orange wheel and the 'Add Exercise' button is unresponsive after a recent deployment.",
   "architectural_notes": [
-    "App is deployed on the Internet Computer platform using dfx CLI and canisters",
-    "Internet Identity is used for authentication/login"
+    "App uses Internet Computer canisters for backend data storage and retrieval",
+    "Frontend assets (images like goatbuff.png) should be placed in frontend/public/ folder"
   ],
   "known_issues": [
-    "History section does not display completed workout sessions",
-    "Internet Identity login is broken - sessions do not persist",
-    "Video mascot (swoleAF.mp4) could not be added to login page due to configuration error"
+    "Manage Exercise page shows perpetual spinning orange wheel after login; Add Exercise button unresponsive — likely broken canister query/update call"
   ],
   "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-verify-that-the-usequeries-ts-history-hook-correctly-calls-the-backend-actor-method-passes-the-right-arguments-and-maps-the-response-into-the-shape-expected-by-workouthistory-and-historysessioncard-fix-any-mismatch-between-the-hook-s-return-type-and-what-the-components-consume",
-      "title": "Verify that the useQueries.ts history hook correctly calls the backend actor method, passes the right arguments, and maps the response into the shape expected by WorkoutHistory and HistorySessionCard. Fix any mismatch between the hook's return type and what the components consume.",
+      "id": "feature-investigate-and-fix-the-exerciselibrary-page-so-it-no-longer-shows-a-perpetual-spinning-orange-loading-indicator-after-a-user-logs-in-the-page-should-resolve-its-loading-state-and-render-the-exercise-list-or-an-empty-state-once-the-backend-query-completes-or-errors",
+      "title": "Investigate and fix the ExerciseLibrary page so it no longer shows a perpetual spinning orange loading indicator after a user logs in. The page should resolve its loading state and render the exercise list (or an empty state) once the backend query completes or errors.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-investigate-and-fix-the-add-exercise-button-on-the-exercise-library-page-so-it-responds-to-user-clicks-and-opens-the-add-exercise-dialog-form-the-button-must-be-functional-after-the-user-is-authenticated",
+      "title": "Investigate and fix the 'Add Exercise' button on the Exercise Library page so it responds to user clicks and opens the Add Exercise dialog/form. The button must be functional after the user is authenticated.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-audit-the-usequeries-ts-hooks-related-to-exercise-fetching-and-mutation-getexercises-addexercise-etc-to-ensure-actor-initialization-is-awaited-correctly-before-making-canister-calls-and-that-query-mutation-error-states-are-properly-surfaced-rather-than-silently-hanging",
+      "title": "Audit the useQueries.ts hooks related to exercise fetching and mutation (getExercises, addExercise, etc.) to ensure actor initialization is awaited correctly before making canister calls, and that query/mutation error states are properly surfaced rather than silently hanging.",
       "reqIds": [
         "REQ-3"
       ],
       "version": 1
     }
   ],
-  "new_feature_requests": [
-    {
-      "id": "AR-1",
-      "summary": "Diagnose and fix the WorkoutHistory page so that completed workout sessions are actually fetched from the backend and rendered. The page should display all past sessions via HistorySessionCard components, with proper loading, error, and empty states.",
-      "reqIds": [
-        "REQ-1"
-      ],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Verify that the backend getWorkoutHistory (or equivalent) query function correctly returns completed sessions for the calling Principal. If the backend stores sessions but the query returns an empty or incorrect result, fix the retrieval logic so sessions saved under the user's Principal are returned in reverse-chronological order.",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "status": "pending"
-    }
-  ],
+  "new_feature_requests": [],
   "gameProjectType": "none",
-  "projectName": "Track-A-Swole",
+  "projectName": "Fix perpetual spinner and broken Add Exercise functionality on Manage Exercise page",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

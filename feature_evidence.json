@@ -2,8 +2,46 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-verify-that-the-usequeries-ts-history-hook-correctly-calls-the-backend-actor-method-passes-the-right-arguments-and-maps-the-response-into-the-shape-expected-by-workouthistory-and-historysessioncard-fix-any-mismatch-between-the-hook-s-return-type-and-what-the-components-consume",
-      "featureTitle": "Verify that the useQueries.ts history hook correctly calls the backend actor method, passes the right arguments, and maps the response into the shape expected by WorkoutHistory and HistorySessionCard. Fix any mismatch between the hook's return type and what the components consume.",
+      "featureId": "feature-investigate-and-fix-the-exerciselibrary-page-so-it-no-longer-shows-a-perpetual-spinning-orange-loading-indicator-after-a-user-logs-in-the-page-should-resolve-its-loading-state-and-render-the-exercise-list-or-an-empty-state-once-the-backend-query-completes-or-errors",
+      "featureTitle": "Investigate and fix the ExerciseLibrary page so it no longer shows a perpetual spinning orange loading indicator after a user logs in. The page should resolve its loading state and render the exercise list (or an empty state) once the backend query completes or errors.",
+      "files": [
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/ExerciseLibrary.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-investigate-and-fix-the-add-exercise-button-on-the-exercise-library-page-so-it-responds-to-user-clicks-and-opens-the-add-exercise-dialog-form-the-button-must-be-functional-after-the-user-is-authenticated",
+      "featureTitle": "Investigate and fix the 'Add Exercise' button on the Exercise Library page so it responds to user clicks and opens the Add Exercise dialog/form. The button must be functional after the user is authenticated.",
+      "files": [
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/ExerciseLibrary.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-audit-the-usequeries-ts-hooks-related-to-exercise-fetching-and-mutation-getexercises-addexercise-etc-to-ensure-actor-initialization-is-awaited-correctly-before-making-canister-calls-and-that-query-mutation-error-states-are-properly-surfaced-rather-than-silently-hanging",
+      "featureTitle": "Audit the useQueries.ts hooks related to exercise fetching and mutation (getExercises, addExercise, etc.) to ensure actor initialization is awaited correctly before making canister calls, and that query/mutation error states are properly surfaced rather than silently hanging.",
       "files": [
         "frontend/src/hooks/useQueries.ts"
       ],
